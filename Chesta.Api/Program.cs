@@ -1,10 +1,14 @@
+using Chesta.Api.Errors;
+using Chesta.Api.Filters;
 using Chesta.Application;
 using Chesta.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 {
     builder.Services.AddControllers();
+    builder.Services.AddSingleton<ProblemDetailsFactory, ChestaProblemDetailsFactory>();
 
     builder.Services
         .AddApplication()
@@ -12,7 +16,6 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-
     builder.Services.AddCors();
 }
 
@@ -23,16 +26,12 @@ var app = builder.Build();
         app.UseSwagger();
         app.UseSwaggerUI();
     }
-
+    app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
-
     app.UseCors(options => {
         options.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
     });
-
     app.UseAuthorization();
-
     app.MapControllers();
-
     app.Run();
 }

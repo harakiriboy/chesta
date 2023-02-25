@@ -1,11 +1,9 @@
 using System.ComponentModel.DataAnnotations;
+using Chesta.Domain.Entities;
 
 namespace Chesta.Application.Services.Authentication;
 
 public record AuthenticationResult(
-    Guid Id,
-    string FirstName,
-    string LastName,
-    string Email,
+    User User,
     string Token
 );
