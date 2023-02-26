@@ -1,7 +1,10 @@
-using Chesta.Application.Services.Authentication;
+using Chesta.Application.Authentication.Commands.Register;
+using Chesta.Application.Authentication.Common;
+using Chesta.Application.Authentication.Queries.Login;
 using Chesta.Contracts.Authentication;
 using Chesta.Domain.Common.Errors;
 using ErrorOr;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Chesta.Api.Controllers
@@ -9,21 +12,18 @@ namespace Chesta.Api.Controllers
     [Route("auth")]
     public class AuthenticationController : ApiController
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly ISender _mediator;
 
-        public AuthenticationController(IAuthenticationService authenticationService)
+        public AuthenticationController(IMediator mediator)
         {
-            _authenticationService = authenticationService;
+            _mediator = mediator;
         }
 
         [HttpPost("register")]
-        public IActionResult Register(RegisterRequest request)
+        public async Task<IActionResult> Register(RegisterRequest request)
         {
-            ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(
-                request.FirstName,
-                request.LastName,
-                request.Email,
-                request.Password);
+            var command = new RegisterCommand(request.FirstName, request.LastName, request.Email, request.Password);
+            ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
             return authResult.Match(
                 authResult => Ok(MapAuthResult(authResult)),
@@ -32,11 +32,10 @@ namespace Chesta.Api.Controllers
         }
 
         [HttpPost("login")]
-        public IActionResult Login(LoginRequest request)
+        public async Task<IActionResult> Login(LoginRequest request)
         {
-            var authResult = _authenticationService.Login(
-                request.Email, 
-                request.Password);
+            var query = new LoginQuery(request.Email, request.Password);
+            var authResult = await _mediator.Send(query);
 
             if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials) 
             {
