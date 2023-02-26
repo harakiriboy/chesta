@@ -1,7 +1,9 @@
 using System.Diagnostics;
 using Chesta.Application.Common.Interfaces.Authentication;
 using Chesta.Application.Common.Interfaces.Persistence;
+using Chesta.Domain.Common.Errors;
 using Chesta.Domain.Entities;
+using ErrorOr;
 
 namespace Chesta.Application.Services.Authentication
 {
@@ -17,11 +19,11 @@ namespace Chesta.Application.Services.Authentication
         }
 
         
-        public AuthenticationResult Register(string firstName, string lastName, string email, string password)
+        public ErrorOr<AuthenticationResult> Register(string firstName, string lastName, string email, string password)
         {
             // 1. Validate user not exist
             if(_userRepository.GetUserByEmail(email) is not null) {
-                throw new Exception("User with given email already exists");
+                return Errors.User.DuplicateEmail;
             }
 
             // 2. Create user (generate unique ID) & Persist in DB
@@ -44,17 +46,17 @@ namespace Chesta.Application.Services.Authentication
             );
         }
 
-        public AuthenticationResult Login(string email, string password)
+        public ErrorOr<AuthenticationResult> Login(string email, string password)
         {
 
             // 1. Validate the user exists
             if(_userRepository.GetUserByEmail(email) is not User user) {
-                throw new Exception("User with given email doesn't exist");
+                return Errors.Authentication.InvalidCredentials;
             }
 
             // 2. Validate the password is correct
             if(user.Password != password) {
-                throw new Exception("Password is incorrect");
+                return Errors.Authentication.InvalidCredentials;
             }
 
 

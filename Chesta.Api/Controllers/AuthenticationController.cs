@@ -1,18 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
 using Chesta.Application.Services.Authentication;
 using Chesta.Contracts.Authentication;
+using Chesta.Domain.Common.Errors;
+using ErrorOr;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Chesta.Api.Controllers
 {
-    [ApiController]
     [Route("auth")]
-    public class AuthenticationController : ControllerBase
+    public class AuthenticationController : ApiController
     {
         private readonly IAuthenticationService _authenticationService;
 
@@ -24,20 +19,16 @@ namespace Chesta.Api.Controllers
         [HttpPost("register")]
         public IActionResult Register(RegisterRequest request)
         {
-            var authResult = _authenticationService.Register(
-                request.FirstName, 
-                request.LastName, 
-                request.Email, 
+            ErrorOr<AuthenticationResult> authResult = _authenticationService.Register(
+                request.FirstName,
+                request.LastName,
+                request.Email,
                 request.Password);
 
-            var response = new AuthenticationReponse(
-                authResult.User.Id,
-                authResult.User.FirstName,
-                authResult.User.LastName,
-                authResult.User.Email,
-                authResult.Token
+            return authResult.Match(
+                authResult => Ok(MapAuthResult(authResult)),
+                errors => Problem(errors)
             );
-            return Ok(response);
         }
 
         [HttpPost("login")]
@@ -47,14 +38,28 @@ namespace Chesta.Api.Controllers
                 request.Email, 
                 request.Password);
 
-            var response = new AuthenticationReponse(
+            if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials) 
+            {
+                return Problem(
+                    statusCode: StatusCodes.Status401Unauthorized,
+                    title: authResult.FirstError.Description);
+            }
+            
+            return authResult.Match(
+                authResult => Ok(MapAuthResult(authResult)),
+                errors => Problem(errors)
+            );
+        }
+
+        private static AuthenticationReponse MapAuthResult(AuthenticationResult authResult)
+        {
+            return new AuthenticationReponse(
                 authResult.User.Id,
                 authResult.User.FirstName,
                 authResult.User.LastName,
                 authResult.User.Email,
                 authResult.Token
             );
-            return Ok(response);
         }
     }
 }

@@ -7,9 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chesta.Api.Controllers
 {
-    public class ErrorsController : ControllerBase
+    public class ErrorsController : ApiController
     {
         [Route("/error")]
+        [ApiExplorerSettings(IgnoreApi = true)]
         public IActionResult Error() {
             Exception? exception = HttpContext.Features.Get<IExceptionHandlerFeature>()?.Error;
             return Problem();

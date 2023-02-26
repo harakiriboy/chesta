@@ -1,5 +1,4 @@
-using Chesta.Api.Errors;
-using Chesta.Api.Filters;
+using Chesta.Api.Common.Errors;
 using Chesta.Application;
 using Chesta.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
