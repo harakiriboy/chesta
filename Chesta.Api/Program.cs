@@ -1,15 +1,12 @@
-using Chesta.Api.Common.Errors;
+using Chesta.Api;
 using Chesta.Application;
 using Chesta.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 {
-    builder.Services.AddControllers();
-    builder.Services.AddSingleton<ProblemDetailsFactory, ChestaProblemDetailsFactory>();
-
     builder.Services
+        .AddPresentation()
         .AddApplication()
         .AddInfrastructure(builder.Configuration);
 
