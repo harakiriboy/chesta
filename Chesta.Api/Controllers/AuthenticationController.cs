@@ -42,7 +42,7 @@ namespace Chesta.Api.Controllers
             var query = _mapper.Map<LoginQuery>(request);
             var authResult = await _mediator.Send(query);
 
-            if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials) 
+            if (authResult.IsError && authResult.FirstError == Errors.Authentication.InvalidCredentials)
             {
                 return Problem(
                     statusCode: StatusCodes.Status401Unauthorized,

@@ -6,6 +6,7 @@ using Chesta.Infrastructure.Authentication;
 using Chesta.Infrastructure.Persistence;
 using Chesta.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -19,10 +20,21 @@ public static class DependencyInjection
         this IServiceCollection services,
         ConfigurationManager configuration)
     {
-        services.AddAuth(configuration);
+        services
+            .AddAuth(configuration)
+            .AddPersistence(configuration);
+
         services.AddSingleton<IDateTimeProvider, DateTimeProvider>();
         
+        return services;
+    }
+
+    public static IServiceCollection AddPersistence(this IServiceCollection services, ConfigurationManager configuration)
+    {
+        services.AddDbContext<ChestaDbContext>(options =>
+            options.UseSqlServer("Server=localhost;Initial Catalog=ChestaTestDb;User Id=sa;Password=P@ssw0rd"));
         services.AddScoped<IUserRepository, UserRepository>();
+
         return services;
     }
 

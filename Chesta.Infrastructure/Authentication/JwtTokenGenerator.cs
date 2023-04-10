@@ -1,11 +1,9 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http.Headers;
 using System.Security.Claims;
 using System.Text;
 using Chesta.Application.Common.Interfaces.Authentication;
 using Chesta.Application.Common.Interfaces.Services;
 using Chesta.Domain.Entities;
-using Chesta.Infrastructure.Services;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
