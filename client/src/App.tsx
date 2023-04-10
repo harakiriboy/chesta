@@ -1,33 +1,53 @@
-import { useEffect, useState } from "react";
+import { Route, Link, createBrowserRouter, createRoutesFromElements, Outlet, RouterProvider } from "react-router-dom";
+import AnalyticsPage from "./pages/AnalyticsPage";
+import AuthorPage from "./pages/AuthorPage";
+import CheckoutPage from "./pages/CheckoutPage";
+import HomePage from "./pages/HomePage";
+import LoginPage from "./pages/LoginPage";
+import MembersPage from "./pages/MembersPage";
+import PayoutsPage from "./pages/PayoutsPage";
+import RegisterPage from "./pages/RegisterPage";
+import SearchPage from "./pages/SearchPage";
+import SettingsPage from "./pages/SettingsPage";
+import "./App.css";
+import Navbar from "./layouts/Navbar/Navbar";
 
 function App() {
-  const [products, setProducts] = useState([
-    {date: 'prod1', summary: "sum1"},
-    {date: 'prod2', summary: "sum2"},
-    {date: 'prod3', summary: "sum3"},
-  ]);
 
-  useEffect(() => {
-    fetch('https://localhost:7014/WeatherForecast')
-      .then(response => response.json())
-      .then(data => setProducts(data))
-  }, [])
-
-  function addProduct() {
-    setProducts(prevState => [...prevState, 
-      { date: 'prod' + (prevState.length + 1), summary: '' + ((prevState.length*100) + 100) }])
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // Handle the form submission here
   }
 
+  const router = createBrowserRouter(
+    createRoutesFromElements(
+      <Route path="/" element={<Root/>}>
+        <Route index element={ <HomePage/> } />
+        <Route path="/Search" element={ <SearchPage/> } />
+        <Route path="/Register" element={ <RegisterPage/> } />
+        <Route path="/Login" element={ <LoginPage onSubmit={handleLogin}/> } />
+        <Route path="/Settings" element={ <SettingsPage/> } />
+        <Route path="/Author" element={ <AuthorPage/> } />
+        <Route path="/Members" element={ <MembersPage/> } />
+        <Route path="/Payouts" element={ <PayoutsPage/> } />
+        <Route path="/Insights" element={ <AnalyticsPage/> } />
+        <Route path="/Checkout" element={ <CheckoutPage/> } />
+      </Route>
+    )
+  )
   return (
-    <div>
-      <h1>Re-store</h1>
-      <ul>
-        {products.map((item, index) => (
-          <li key={index}>{item.date} - {item.summary}</li>
-        ))}
-      </ul>
-      <button onClick={addProduct}>Add new product</button>
+    <div className="App">
+      <RouterProvider router={router}/>
     </div>
+  );
+}
+
+const Root = () => {
+  return (
+    <>
+    <Navbar/>
+    <div><Outlet /></div>
+    </>
   );
 }
 
