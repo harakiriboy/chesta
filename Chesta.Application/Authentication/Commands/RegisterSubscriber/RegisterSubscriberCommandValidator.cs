@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentValidation;
 
-namespace Chesta.Application.Authentication.Commands.Register
+namespace Chesta.Application.Authentication.Commands.RegisterSubscriber
 {
-    public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
+    public class RegisterSubscriberCommandValidator : AbstractValidator<RegisterSubscriberCommand>
     {
-        public RegisterCommandValidator()
+        public RegisterSubscriberCommandValidator()
         {
             RuleFor(x => x.FirstName).NotEmpty();
             RuleFor(x => x.LastName).NotEmpty();

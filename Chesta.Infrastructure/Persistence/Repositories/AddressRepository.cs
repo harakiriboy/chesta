@@ -1,24 +1,25 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Chesta.Application.Common.Interfaces.Persistence;
 using Chesta.Domain.Entities;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chesta.Infrastructure.Persistence.Repositories
 {
-    public class AddressRepository : IAddressRepository
+    public class AddressRepository : GenericRepository<Address>, IAddressRepository
     {
-        public ChestaDbContext context { get; set; }
-        public AddressRepository(ChestaDbContext context)
+        ChestaDbContext context;
+        public AddressRepository(ChestaDbContext context) : base(context)
         {
             this.context = context;
         }        
 
-        public async Task<Address?> GetAddressById(int id)
+        public async Task<Address> GetAddressById(int id)
         {
-            return await context.Address.FirstOrDefaultAsync(x => x.Id == id);
+            var address = await context.Address.FirstOrDefaultAsync(x => x.Id == id);
+            if (address is null) {
+                return null;
+            }
+            return address;
         }
 
         public async void Insert(Address address)
@@ -27,10 +28,10 @@ namespace Chesta.Infrastructure.Persistence.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task<IQueryable<Address>> GetAll()
+        public async Task<IEnumerable<AddressDto>> GetAll<AddressDto>(CancellationToken cancellationToken)
         {
-            var addresses = await context.Address.AsQueryable().ToListAsync();
-            return (IQueryable<Address>)addresses;
+            var addresses = await context.Address.ProjectToType<AddressDto>().AsQueryable().ToListAsync();
+            return addresses;
         }
     }
 }

@@ -51,18 +51,11 @@ namespace Chesta.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     AuthorUsername = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StripeAccountId = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    AddressId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Authors", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Authors_Address_AddressId",
-                        column: x => x.AddressId,
-                        principalTable: "Address",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Authors_Users_UserId",
                         column: x => x.UserId,
@@ -221,12 +214,6 @@ namespace Chesta.Infrastructure.Migrations
                 column: "AuhorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Authors_AddressId",
-                table: "Authors",
-                column: "AddressId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Authors_UserId",
                 table: "Authors",
                 column: "UserId",
@@ -281,6 +268,9 @@ namespace Chesta.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Address");
+
+            migrationBuilder.DropTable(
                 name: "Comments");
 
             migrationBuilder.DropTable(
@@ -297,9 +287,6 @@ namespace Chesta.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "Authors");
-
-            migrationBuilder.DropTable(
-                name: "Address");
 
             migrationBuilder.DropTable(
                 name: "Users");

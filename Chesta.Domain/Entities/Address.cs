@@ -14,6 +14,12 @@ namespace Chesta.Domain.Entities
         public string Street { get; set; } = null!;
 
         // Author
-        public Author Author { get; set; } = null!;
+        // public Author Author { get; set; } = null!;
+
+        public Address(string country, string region)
+        {
+            Country = country;
+            Region = region;
+        }
     }
 }

@@ -1,4 +1,5 @@
-using Chesta.Application.Authentication.Commands.Register;
+using Chesta.Application.Authentication.Commands.RegisterAuthor;
+using Chesta.Application.Authentication.Commands.RegisterSubscriber;
 using Chesta.Application.Authentication.Common;
 using Chesta.Application.Authentication.Queries.Login;
 using Chesta.Contracts.Authentication;
@@ -10,7 +11,9 @@ namespace Chesta.Api.Common.Mapping
     {
         public void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<RegisterRequest, RegisterCommand>();
+            config.NewConfig<RegisterUserRequest, RegisterSubscriberCommand>();
+
+            config.NewConfig<RegisterAuthorRequest, RegisterAuthorCommand>();
 
             config.NewConfig<LoginRequest, LoginQuery>();
             

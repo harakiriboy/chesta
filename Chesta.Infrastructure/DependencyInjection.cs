@@ -2,8 +2,10 @@ using System.Text;
 using Chesta.Application.Common.Interfaces.Authentication;
 using Chesta.Application.Common.Interfaces.Persistence;
 using Chesta.Application.Common.Interfaces.Services;
+using Chesta.Application.Services;
 using Chesta.Infrastructure.Authentication;
 using Chesta.Infrastructure.Persistence;
+using Chesta.Infrastructure.Persistence.Repositories;
 using Chesta.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -33,7 +35,12 @@ public static class DependencyInjection
     {
         services.AddDbContext<ChestaDbContext>(options =>
             options.UseSqlServer("Server=localhost;Initial Catalog=ChestaTestDb;User Id=sa;Password=P@ssw0rd"));
+        services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IAddressRepository, AddressRepository>();
+        services.AddScoped<IAuthorRepository, AuthorRepository>();
+        services.AddScoped<IStripeAccountService, StripeAccountService>();
+        services.AddScoped<IStripeCustomerService, StripeCustomerService>();
 
         return services;
     }

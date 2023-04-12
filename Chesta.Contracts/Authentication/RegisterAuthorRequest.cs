@@ -1,8 +1,9 @@
 namespace Chesta.Contracts.Authentication;
 
-public record RegisterRequest(
+public record RegisterAuthorRequest(
     string FirstName,
     string LastName,
     string Email,
-    string Password
+    string Password,
+    string AuthorUsername
 );

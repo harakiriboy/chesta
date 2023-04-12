@@ -1,7 +1,7 @@
 namespace Chesta.Contracts.Authentication;
 
 public record AuthenticationReponse(
-    Guid Id,
+    int Id,
     string FirstName,
     string LastName,
     string Email,

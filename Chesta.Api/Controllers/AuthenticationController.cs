@@ -1,4 +1,5 @@
-using Chesta.Application.Authentication.Commands.Register;
+using Chesta.Application.Authentication.Commands.RegisterAuthor;
+using Chesta.Application.Authentication.Commands.RegisterSubscriber;
 using Chesta.Application.Authentication.Common;
 using Chesta.Application.Authentication.Queries.Login;
 using Chesta.Contracts.Authentication;
@@ -24,10 +25,22 @@ namespace Chesta.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
+        [HttpPost("registerUser")]
+        public async Task<IActionResult> RegisterUser(RegisterUserRequest request)
         {
-            var command = _mapper.Map<RegisterCommand>(request);
+            var command = _mapper.Map<RegisterSubscriberCommand>(request);
+            ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
+
+            return authResult.Match(
+                authResult => Ok(_mapper.Map<AuthenticationReponse>(authResult)),
+                errors => Problem(errors)
+            );
+        }
+
+        [HttpPost("registerAuthor")]
+        public async Task<IActionResult> RegisterAuthor(RegisterAuthorRequest request)
+        {
+            var command = _mapper.Map<RegisterAuthorCommand>(request);
             ErrorOr<AuthenticationResult> authResult = await _mediator.Send(command);
 
             return authResult.Match(

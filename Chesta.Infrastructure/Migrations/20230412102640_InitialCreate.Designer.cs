@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chesta.Infrastructure.Migrations
 {
     [DbContext(typeof(ChestaDbContext))]
-    [Migration("20230409130201_InitialCreate")]
+    [Migration("20230412102640_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -61,9 +61,6 @@ namespace Chesta.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
                     b.Property<string>("AuthorUsername")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -76,9 +73,6 @@ namespace Chesta.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AddressId")
-                        .IsUnique();
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -290,19 +284,11 @@ namespace Chesta.Infrastructure.Migrations
 
             modelBuilder.Entity("Chesta.Domain.Entities.Author", b =>
                 {
-                    b.HasOne("Chesta.Domain.Entities.Address", "Address")
-                        .WithOne("Author")
-                        .HasForeignKey("Chesta.Domain.Entities.Author", "AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Chesta.Domain.Entities.User", "User")
                         .WithOne("Author")
                         .HasForeignKey("Chesta.Domain.Entities.Author", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Address");
 
                     b.Navigation("User");
                 });
@@ -400,12 +386,6 @@ namespace Chesta.Infrastructure.Migrations
                     b.Navigation("Author");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Chesta.Domain.Entities.Address", b =>
-                {
-                    b.Navigation("Author")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Chesta.Domain.Entities.Author", b =>

@@ -6,6 +6,6 @@ namespace Chesta.Application.Common.Interfaces.Persistence
     {
         User? GetUserByEmail(string email);
 
-        void Add(User user);
+        User Add(User user);
     }
 }

@@ -1,7 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Chesta.Application.UseCases.AddressUseCase.Dto;
+using Chesta.Application.UseCases.AddressUseCase.Queries;
+using Chesta.Application.UseCases.AddressUseCase.Queries.AddressById;
+using Chesta.Application.UseCases.AddressUseCase.Queries.FullAddressById;
 using Chesta.Domain.Entities;
 using MapsterMapper;
 using MediatR;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chesta.Api.Controllers
 {
-    [Route("address")]
+    [Route("chesta/address")]
     [AllowAnonymous]
     public class AddressController : ApiController
     {
@@ -23,10 +23,20 @@ namespace Chesta.Api.Controllers
             _mapper = mapper;
         }
 
-        // [HttpGet]
-        // public async Task<Address> GetAll()
-        // {
-            
-        // }
+        [HttpGet]
+        public async Task<IEnumerable<AddressDto>> GetAll()
+        {
+            return await _mediator.Send(new GetAddressListQuery());
+        }
+
+        [HttpGet("{id}/fullbody")]
+        public async Task<Address> GetFullAddressById(int id) {
+            return await _mediator.Send(new GetFullAddressByIdQuery(id));
+        }
+
+        [HttpGet("{id}")]
+        public async Task<AddressDto> GetAddressById(int id) {
+            return await _mediator.Send(new GetAddressByIdQuery(id));
+        }
     }
 }
