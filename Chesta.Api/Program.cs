@@ -11,6 +11,10 @@ var builder = WebApplication.CreateBuilder(args);
         .AddApplication()
         .AddInfrastructure(builder.Configuration);
 
+    builder.Services.AddControllers().AddNewtonsoftJson(options => {
+        options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+    });
+
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen(options => {
         options.SwaggerDoc("v1", new OpenApiInfo { Title = "Chesta API", Version = "v1" });

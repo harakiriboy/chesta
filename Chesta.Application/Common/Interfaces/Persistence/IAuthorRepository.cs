@@ -6,8 +6,7 @@ using Chesta.Domain.Entities;
 
 namespace Chesta.Application.Common.Interfaces.Persistence
 {
-    public interface IAuthorRepository
-    {
+    public interface IAuthorRepository : IGenericRepository<Author> {
         Task<Author> Add(Author author);
     }
 }

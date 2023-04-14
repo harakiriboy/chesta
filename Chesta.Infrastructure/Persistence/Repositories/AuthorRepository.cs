@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Chesta.Infrastructure.Persistence.Repositories
 {
-    public class AuthorRepository : IAuthorRepository
+    public class AuthorRepository : GenericRepository<Author>, IAuthorRepository
     {
         private readonly ChestaDbContext _context;
 
-        public AuthorRepository(ChestaDbContext context)
+        public AuthorRepository(ChestaDbContext context) : base(context)
         {
             _context = context;
         }

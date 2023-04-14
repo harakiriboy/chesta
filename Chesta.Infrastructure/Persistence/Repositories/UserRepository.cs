@@ -1,14 +1,15 @@
 using Chesta.Application.Common.Interfaces.Persistence;
 using Chesta.Domain.Entities;
+using Chesta.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Chesta.Infrastructure.Persistence
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository : GenericRepository<User>, IUserRepository
     {
         private readonly ChestaDbContext _context;
 
-        public UserRepository(ChestaDbContext context)
+        public UserRepository(ChestaDbContext context) : base(context)
         {
             _context = context;
         }

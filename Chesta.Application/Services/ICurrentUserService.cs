@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Chesta.Infrastructure.Services
+namespace Chesta.Application.Services
 {
-    public class SubscriptionsService
+    public interface ICurrentUserService
     {
         
     }

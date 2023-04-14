@@ -24,5 +24,17 @@ namespace Chesta.Infrastructure.Persistence.Repositories
             var res = await _context.Set<TEntity>().Where(spec).ProjectToType<TItem>().AsQueryable().FirstOrDefaultAsync();
             return res;
         }
+
+        public async Task<TEntity> GetByIdAsync(ASpec<TEntity> spec)
+        {
+            var res = await _context.Set<TEntity>().Where(spec).AsQueryable().FirstOrDefaultAsync();
+            return res;
+        }
+
+        public async Task AddAsync(TEntity entity) 
+        {
+            await _context.Set<TEntity>().AddAsync(entity);
+            await _context.SaveChangesAsync();
+        }
     }
 }
