@@ -8,26 +8,26 @@ namespace Chesta.Application.UseCases.PublicationUseCase.Commands.CreatePublicat
     public class CreatePublicationCommandHandler : IRequestHandler<CreatePublicationCommand, Publication>
     {
         private readonly IAuthorRepository _authorRepository;
-        private readonly IAuthorPlanRepository _authorPlanRepository;
+        private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
         private readonly IPublicationRepository _publicationRepository;
 
-        public CreatePublicationCommandHandler(IAuthorRepository authorRepository, IAuthorPlanRepository authorPlanRepository, IPublicationRepository publicationRepository)
+        public CreatePublicationCommandHandler(IAuthorRepository authorRepository, ISubscriptionPlanRepository subscriptionPlanRepository, IPublicationRepository publicationRepository)
         {
             _authorRepository = authorRepository;
-            _authorPlanRepository = authorPlanRepository;
+            _subscriptionPlanRepository = subscriptionPlanRepository;
             _publicationRepository = publicationRepository;
         }
 
         public async Task<Publication> Handle(CreatePublicationCommand request, CancellationToken cancellationToken)
         {
-            var subscriptionPlan = await _authorPlanRepository.GetByIdAsync(AuthorPlanSpecs.ById(request.SubscriptionPlanId));
-            var author = await _authorRepository.GetByIdAsync(AuthorSpecs.ById(subscriptionPlan.AuhorId));
+            var subscriptionPlan = await _subscriptionPlanRepository.GetByIdAsync(SubscriptionPlanSpecs.ById(request.SubscriptionPlanId));
+            var author = await _authorRepository.GetByIdAsync(AuthorSpecs.ById(subscriptionPlan.AuthorId));
 
             var publication = new Publication {
                 Title = request.Title,
                 Text = request.Text,
                 VideoLink = request.VideoLink,
-                PlanId = request.SubscriptionPlanId,
+                SubscriptionPlanId = request.SubscriptionPlanId,
                 AuthorId = author.Id
             };
 

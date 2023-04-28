@@ -6,7 +6,7 @@ namespace Chesta.Infrastructure.Services
 {
     public class StripeSubscriptionService : IStripeSubscriptionService
     {
-        public async Task<string> CreateStripeSubscription(string customerId, string accountId, AuthorPlan subscriptionPlan) 
+        public async Task<string> CreateStripeSubscription(string customerId, string accountId, SubscriptionPlan subscriptionPlan) 
         {
             StripeConfiguration.ApiKey = "sk_test_51MXfIUHsaxdXWEFBtf4h279DV4TSjtXUOSlvPG5WzeR68VGZ11mdPuPbARFZmbuwMo3OcAiHZxd317bqVoqXhiNL00LTFwNscZ";
 
@@ -37,8 +37,9 @@ namespace Chesta.Infrastructure.Services
                 Expand = new List<string> { "latest_invoice.payment_intent" },
                 TransferData = new SubscriptionTransferDataOptions
                 {
-                    Destination = accountId, // japanese account
+                    Destination = accountId, // destination account id for transfer funds to land
                 },
+                ApplicationFeePercent = 10, // fees that my platform will receive from every payment
             };
             var service = new SubscriptionService();
             var sub = await service.CreateAsync(options);

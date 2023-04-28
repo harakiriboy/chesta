@@ -18,6 +18,23 @@ namespace Chesta.Infrastructure.Services
         public async Task<string> CreateConnectedAccount(RegisterAuthorCommand command)
         {
             StripeConfiguration.ApiKey = "sk_test_51MXfIUHsaxdXWEFBtf4h279DV4TSjtXUOSlvPG5WzeR68VGZ11mdPuPbARFZmbuwMo3OcAiHZxd317bqVoqXhiNL00LTFwNscZ";
+            
+            
+            // uploading document
+            var filename = "C:/Users/HP/OneDrive/Документы/3course/diploma/Chesta/client/src/assets/images/grib.png";
+            var fileId = "";
+            using (FileStream stream = System.IO.File.Open(filename, FileMode.Open))
+            {
+                var fileOptions = new FileCreateOptions
+                {
+                    File = stream,
+                    Purpose = FilePurpose.IdentityDocument,
+                };
+                var fileService = new FileService();
+                var upload = fileService.Create(fileOptions);
+                fileId = upload.Id;
+            }
+
 
             // Creating customer
             var options = new AccountCreateOptions
@@ -43,24 +60,34 @@ namespace Chesta.Infrastructure.Services
                     },
                 ExternalAccount = "tok_visa_debit_us_transferSuccess",
                 BusinessType = "individual",
-                // BusinessProfile = new AccountBusinessProfileOptions
-                //     {
-                //         Mcc = "5045",
-                //         Url = "https://bestcookieco.com",
-                //     },
-                //     Company = new AccountCompanyOptions
-                //     {
-                //         Address = new AddressOptions
-                //         {
-                //             City = "Schenectady",
-                //             Line1 = "123 State St",
-                //             PostalCode = "12345",
-                //             State = "NY",
-                //         },
-                //         TaxId = "000000000",
-                //         Name = "The Best Cookie Co",
-                //         Phone = "8888675309",
-                //     },
+                Individual = new AccountIndividualOptions {
+                    Dob = new DobOptions {
+                        Day = 1,
+                        Month = 1,
+                        Year = 1902
+                    },
+                    Address = new AddressOptions {
+                        City = "Osaka",
+                        State = "Alabama",
+                        PostalCode = "15110",
+                        Line1 = "address_full_match"
+                    },
+                    Phone = "(822) 376-9958",
+                    Email = command.Email,
+                    FirstName = command.FirstName,
+                    LastName = command.LastName,
+                    SsnLast4 = "4622",
+                    IdNumber = "565314622",
+                    Verification = new AccountIndividualVerificationOptions {
+                        Document = new AccountIndividualVerificationDocumentOptions {
+                            Front = fileId
+                        }
+                    },
+                },
+                BusinessProfile = new AccountBusinessProfileOptions {
+                    Mcc = "5734",
+                    Url = "https://www.linkedin.com/in/daulet-yesirkepov-448185210/"
+                }
             };
             var service = new AccountService();
             var account = await service.CreateAsync(options);

@@ -8,6 +8,6 @@ namespace Chesta.Application.Services
 {
     public interface IStripeSubscriptionService
     {
-        Task<string> CreateStripeSubscription(string customerId, string accountId, AuthorPlan subscriptionPlan);
+        Task<string> CreateStripeSubscription(string customerId, string accountId, SubscriptionPlan subscriptionPlan);
     }
 }

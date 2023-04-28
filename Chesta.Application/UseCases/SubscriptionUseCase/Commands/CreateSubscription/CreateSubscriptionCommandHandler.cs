@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Chesta.Application.Common.Interfaces.Persistence;
 using Chesta.Application.Services;
 using Chesta.Domain.Entities;
@@ -15,23 +11,23 @@ namespace Chesta.Application.UseCases.SubscriptionUseCase.Commands.CreateSubscri
     {
         private readonly IUserRepository _userRepository;
         private readonly IAuthorRepository _authorRepository;
-        private readonly IAuthorPlanRepository _authorPlanRepository;
+        private readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
         private readonly ISubscriptionRepository _subscriptionRepository; 
         private readonly IStripeSubscriptionService _subscriptionService;
 
-        public CreateSubscriptionCommandHandler(IUserRepository userRepository, IAuthorRepository authorRepository, IAuthorPlanRepository authorPlanRepository, ISubscriptionRepository subscriptionRepository, IStripeSubscriptionService subscriptionService)
+        public CreateSubscriptionCommandHandler(IUserRepository userRepository, IAuthorRepository authorRepository, ISubscriptionPlanRepository subscriptionPlanRepository, ISubscriptionRepository subscriptionRepository, IStripeSubscriptionService subscriptionService)
         {
             _userRepository = userRepository;
             _authorRepository = authorRepository;
-            _authorPlanRepository = authorPlanRepository;
+            _subscriptionPlanRepository = subscriptionPlanRepository;
             _subscriptionRepository = subscriptionRepository;
             _subscriptionService = subscriptionService;
         }
         public async Task<Subscription> Handle(CreateSubscriptionCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync<User>(UserSpecs.ById(request.UserId));
-            var subscriptionPlan = await _authorPlanRepository.GetByIdAsync<AuthorPlan>(AuthorPlanSpecs.ById(request.SubscriptionPlanId));
-            var author = await _authorRepository.GetByIdAsync<Author>(AuthorSpecs.ById(subscriptionPlan.AuhorId));
+            var subscriptionPlan = await _subscriptionPlanRepository.GetByIdAsync<SubscriptionPlan>(SubscriptionPlanSpecs.ById(request.SubscriptionPlanId));
+            var author = await _authorRepository.GetByIdAsync<Author>(AuthorSpecs.ById(subscriptionPlan.AuthorId));
             var stripeSubscriptionId = await _subscriptionService.CreateStripeSubscription(user.CustomerId, author.StripeAccountId, subscriptionPlan);
 
             var subscription = new Subscription {

@@ -78,39 +78,6 @@ namespace Chesta.Infrastructure.Migrations
                     b.ToTable("Authors");
                 });
 
-            modelBuilder.Entity("Chesta.Domain.Entities.AuthorPlan", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("AccessLevel")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("AuhorId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte>("SubscriptionType")
-                        .HasColumnType("tinyint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AuhorId");
-
-                    b.ToTable("AuthorPlans");
-                });
-
             modelBuilder.Entity("Chesta.Domain.Entities.Comment", b =>
                 {
                     b.Property<int>("Id")
@@ -189,6 +156,9 @@ namespace Chesta.Infrastructure.Migrations
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
 
+                    b.Property<int>("SubscriptionPlanId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -243,6 +213,42 @@ namespace Chesta.Infrastructure.Migrations
                     b.ToTable("Subscriptions");
                 });
 
+            modelBuilder.Entity("Chesta.Domain.Entities.SubscriptionPlan", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AccessLevel")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("int");
+
+                    b.Property<byte>("SubscriptionType")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("SubscriptionPlans");
+                });
+
             modelBuilder.Entity("Chesta.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -289,17 +295,6 @@ namespace Chesta.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Chesta.Domain.Entities.AuthorPlan", b =>
-                {
-                    b.HasOne("Chesta.Domain.Entities.Author", "Author")
-                        .WithMany("Plans")
-                        .HasForeignKey("AuhorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
                 });
 
             modelBuilder.Entity("Chesta.Domain.Entities.Comment", b =>
@@ -356,7 +351,7 @@ namespace Chesta.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Chesta.Domain.Entities.AuthorPlan", "AuthorPlan")
+                    b.HasOne("Chesta.Domain.Entities.SubscriptionPlan", "SubscriptionPlan")
                         .WithMany("Publications")
                         .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -364,7 +359,7 @@ namespace Chesta.Infrastructure.Migrations
 
                     b.Navigation("Author");
 
-                    b.Navigation("AuthorPlan");
+                    b.Navigation("SubscriptionPlan");
                 });
 
             modelBuilder.Entity("Chesta.Domain.Entities.Subscription", b =>
@@ -386,17 +381,23 @@ namespace Chesta.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Chesta.Domain.Entities.SubscriptionPlan", b =>
+                {
+                    b.HasOne("Chesta.Domain.Entities.Author", "Author")
+                        .WithMany("Plans")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("Chesta.Domain.Entities.Author", b =>
                 {
                     b.Navigation("Payments");
 
                     b.Navigation("Plans");
 
-                    b.Navigation("Publications");
-                });
-
-            modelBuilder.Entity("Chesta.Domain.Entities.AuthorPlan", b =>
-                {
                     b.Navigation("Publications");
                 });
 
@@ -408,6 +409,11 @@ namespace Chesta.Infrastructure.Migrations
             modelBuilder.Entity("Chesta.Domain.Entities.Subscription", b =>
                 {
                     b.Navigation("Payments");
+                });
+
+            modelBuilder.Entity("Chesta.Domain.Entities.SubscriptionPlan", b =>
+                {
+                    b.Navigation("Publications");
                 });
 
             modelBuilder.Entity("Chesta.Domain.Entities.User", b =>

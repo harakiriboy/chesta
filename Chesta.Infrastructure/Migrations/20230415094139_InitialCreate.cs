@@ -65,7 +65,7 @@ namespace Chesta.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "AuthorPlans",
+                name: "SubscriptionPlans",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -74,14 +74,15 @@ namespace Chesta.Infrastructure.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AccessLevel = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SubscriptionType = table.Column<byte>(type: "tinyint", nullable: false),
-                    AuhorId = table.Column<int>(type: "int", nullable: false)
+                    Price = table.Column<int>(type: "int", nullable: false),
+                    AuthorId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AuthorPlans", x => x.Id);
+                    table.PrimaryKey("PK_SubscriptionPlans", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AuthorPlans_Authors_AuhorId",
-                        column: x => x.AuhorId,
+                        name: "FK_SubscriptionPlans_Authors_AuthorId",
+                        column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -126,23 +127,24 @@ namespace Chesta.Infrastructure.Migrations
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VideoLink = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     AuthorId = table.Column<int>(type: "int", nullable: false),
+                    SubscriptionPlanId = table.Column<int>(type: "int", nullable: false),
                     PlanId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Publications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Publications_AuthorPlans_PlanId",
-                        column: x => x.PlanId,
-                        principalTable: "AuthorPlans",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Publications_Authors_AuthorId",
                         column: x => x.AuthorId,
                         principalTable: "Authors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Publications_SubscriptionPlans_PlanId",
+                        column: x => x.PlanId,
+                        principalTable: "SubscriptionPlans",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -209,11 +211,6 @@ namespace Chesta.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorPlans_AuhorId",
-                table: "AuthorPlans",
-                column: "AuhorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Authors_UserId",
                 table: "Authors",
                 column: "UserId",
@@ -255,6 +252,11 @@ namespace Chesta.Infrastructure.Migrations
                 column: "PlanId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SubscriptionPlans_AuthorId",
+                table: "SubscriptionPlans",
+                column: "AuthorId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Subscriptions_AuthorId",
                 table: "Subscriptions",
                 column: "AuthorId");
@@ -283,7 +285,7 @@ namespace Chesta.Infrastructure.Migrations
                 name: "Subscriptions");
 
             migrationBuilder.DropTable(
-                name: "AuthorPlans");
+                name: "SubscriptionPlans");
 
             migrationBuilder.DropTable(
                 name: "Authors");

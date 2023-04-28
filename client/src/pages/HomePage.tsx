@@ -1,10 +1,11 @@
-import "../App.css";
+import { Typography } from "@mui/material";
+//import "../App.css";
 
 const HomePage: React.FC = () => {
   return (
       <div className="App">
         <div className="hero">
-          <h1>Learn New Skills Online</h1>
+          <Typography variant="h1">Learn New Skills Online</Typography>
           <p>Get ahead with online courses from top institutions around the world. Choose from thousands of courses in IT, business, and more.</p>
           <a href="/" className="button primary">Start Learning</a>
         </div>

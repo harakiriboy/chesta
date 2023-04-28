@@ -53,12 +53,14 @@ var app = builder.Build();
     if (app.Environment.IsDevelopment())
     {
         app.UseSwagger();
-        app.UseSwaggerUI();
+        app.UseSwaggerUI(c => {
+            c.ConfigObject.AdditionalItems.Add("persistAuthorization", "true");
+        });
     }
     app.UseExceptionHandler("/error");
     app.UseHttpsRedirection();
     app.UseCors(options => {
-        options.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
+        options.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
     });
     app.UseAuthentication();
     app.UseAuthorization();

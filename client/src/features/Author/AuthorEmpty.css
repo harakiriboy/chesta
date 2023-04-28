@@ -1,0 +1,29 @@
+.column1 {
+    float: left;
+    width: 45%;
+    height: 90px;
+} 
+
+.column1 p:hover {
+    color: "green"; 
+}
+
+.colll {
+    margin-left: '520px'
+}
+
+.colll:hover {
+    color: green;
+}
+
+.column2 {
+    float: left;
+    width: 10%;
+    height: 90px;
+}
+
+.column3 {
+    float: left;
+    width: 45%;
+    height: 90px;
+}

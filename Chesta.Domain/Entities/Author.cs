@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Chesta.Domain.Entities
 {
@@ -13,7 +9,7 @@ namespace Chesta.Domain.Entities
         public string StripeAccountId { get; set; } = null!;
 
         // Author plans
-        public List<AuthorPlan> Plans { get; set; } = null!;
+        public List<SubscriptionPlan> Plans { get; set; } = null!;
 
         // Payments
         public List<Payment> Payments { get; set; } = null!;

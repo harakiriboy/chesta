@@ -6,7 +6,7 @@ using Chesta.Domain.Entities;
 
 namespace Chesta.Application.Common.Interfaces.Persistence
 {
-    public interface IAuthorPlanRepository : IGenericRepository<AuthorPlan>
+    public interface ISubscriptionPlanRepository : IGenericRepository<SubscriptionPlan>
     {
         
     }

@@ -8,7 +8,7 @@ using MediatR;
 
 namespace Chesta.Application.UseCases.SubscriptionUseCase.Commands
 {
-    public class CreateSubscriptionPlanCommand : IRequest<AuthorPlan>
+    public class CreateSubscriptionPlanCommand : IRequest<SubscriptionPlan>
     {
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;

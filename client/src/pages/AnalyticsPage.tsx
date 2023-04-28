@@ -1,8 +1,9 @@
 import React from 'react'
+import Dashboard from '../features/Insights/Dashboard'
 
 function AnalyticsPage() {
   return (
-    <div>AnalyticsPage</div>
+    <Dashboard/>
   )
 }
 

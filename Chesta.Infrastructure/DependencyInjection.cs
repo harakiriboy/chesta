@@ -39,7 +39,7 @@ public static class DependencyInjection
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
-        services.AddScoped<IAuthorPlanRepository, AuthorPlanRepository>();
+        services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
         services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();
         services.AddScoped<IPublicationRepository, PublicationRepository>();
         services.AddScoped<IStripeAccountService, StripeAccountService>();

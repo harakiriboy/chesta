@@ -41,6 +41,6 @@ namespace Chesta.Infrastructure.Persistence
         public DbSet<Address> Address { get; set; } = null!;
         public DbSet<Comment> Comments { get; set; } = null!;
         public DbSet<Publication> Publications { get; set; } = null!;
-        public DbSet<AuthorPlan> AuthorPlans { get; set; } = null!;
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; } = null!;
     }
 }

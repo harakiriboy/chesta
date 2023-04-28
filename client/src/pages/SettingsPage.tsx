@@ -1,6 +1,8 @@
+import Settings from "../features/Settings/Settings";
+
 function SettingsPage() {
   return (
-    <div>SettingsPage</div>
+    <Settings />
   )
 }
 

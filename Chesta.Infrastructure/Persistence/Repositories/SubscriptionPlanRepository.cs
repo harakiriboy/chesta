@@ -7,9 +7,9 @@ using Chesta.Domain.Entities;
 
 namespace Chesta.Infrastructure.Persistence.Repositories
 {
-    public class AuthorPlanRepository : GenericRepository<AuthorPlan>, IAuthorPlanRepository
+    public class SubscriptionPlanRepository : GenericRepository<SubscriptionPlan>, ISubscriptionPlanRepository
     {
-        public AuthorPlanRepository(ChestaDbContext context) : base(context)
+        public SubscriptionPlanRepository(ChestaDbContext context) : base(context)
         {
         }
     }
