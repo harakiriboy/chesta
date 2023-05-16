@@ -24,7 +24,7 @@ namespace Chesta.Infrastructure.Persistence
             _context.Users.AddAsync(user);
             _context.SaveChanges();
             var newuser = _context.Users.FirstOrDefault(x => x.Id == user.Id);
-            return newuser;
+            return newuser!;
         }
     }
 }

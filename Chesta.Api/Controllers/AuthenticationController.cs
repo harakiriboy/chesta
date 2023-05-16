@@ -2,10 +2,12 @@ using System.Security.Claims;
 using Chesta.Application.Authentication.Commands.RegisterAuthor;
 using Chesta.Application.Authentication.Commands.RegisterSubscriber;
 using Chesta.Application.Authentication.Common;
+using Chesta.Application.Authentication.Queries.CurrentAuthor;
 using Chesta.Application.Authentication.Queries.CurrentUser;
 using Chesta.Application.Authentication.Queries.Login;
 using Chesta.Contracts.Authentication;
 using Chesta.Domain.Common.Errors;
+using Chesta.Domain.Entities;
 using ErrorOr;
 using MapsterMapper;
 using MediatR;
@@ -14,7 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chesta.Api.Controllers
 {
-    [Route("auth")]
+    [Route("chesta/auth")]
     public class AuthenticationController : ApiController
     {
         private readonly ISender _mediator;
@@ -89,6 +91,14 @@ namespace Chesta.Api.Controllers
                 authResult => Ok(_mapper.Map<AuthenticationReponse>(authResult)),
                 errors => Problem(errors)
             );
+        }
+
+        [HttpGet("getCurrentAuthor")]
+        [AllowAnonymous]
+        public async Task<string> GetCurrentAuthor(int id) {
+            var query = new GetCurrentAuthorQuery(id);
+            var result = await _mediator.Send(query);
+            return result.AuthorUsername;
         }
     }
 }

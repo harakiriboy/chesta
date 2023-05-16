@@ -8,5 +8,8 @@ namespace Chesta.Application.Common.Interfaces.Persistence
 {
     public interface IAuthorRepository : IGenericRepository<Author> {
         Task<Author> Add(Author author);
+        Task<Author> GetByUserId(int id);
+        Task<Author?> GetByUsername(string username);
+        Task<IEnumerable<Author>> GetByUsernameAndTag(string username, string tag);
     }
 }

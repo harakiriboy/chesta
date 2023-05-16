@@ -24,6 +24,11 @@ namespace Chesta.Domain.Entities
         [ForeignKey("UserId")]
         public User User { get; set; } = null!;
 
+        // SubscriptionPlanId
+        public int SubscriptionPlanId { get; set; }
+        [ForeignKey("SubscriptionPlanId")]
+        public SubscriptionPlan SubscriptionPlan { get; set; } = null!;
+
         // Payment
         public List<Payment> Payments { get; set; } = null!;
     }

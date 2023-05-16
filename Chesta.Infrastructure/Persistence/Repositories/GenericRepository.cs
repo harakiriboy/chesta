@@ -22,13 +22,13 @@ namespace Chesta.Infrastructure.Persistence.Repositories
         public async Task<TItem> GetByIdAsync<TItem>(ASpec<TEntity> spec)
         {
             var res = await _context.Set<TEntity>().Where(spec).ProjectToType<TItem>().AsQueryable().FirstOrDefaultAsync();
-            return res;
+            return res!;
         }
 
         public async Task<TEntity> GetByIdAsync(ASpec<TEntity> spec)
         {
             var res = await _context.Set<TEntity>().Where(spec).AsQueryable().FirstOrDefaultAsync();
-            return res;
+            return res!;
         }
 
         public async Task AddAsync(TEntity entity) 

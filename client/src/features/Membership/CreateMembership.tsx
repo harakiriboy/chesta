@@ -1,10 +1,22 @@
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
-import { Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { Typography } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import { useNavigate } from 'react-router-dom';
+import { FieldValues, useForm } from 'react-hook-form';
+import agent from '../../services/agent';
 
 export default function CreateMemership() {
+  const navigate = useNavigate();
+  const {register, handleSubmit, formState: {isSubmitting, errors, isValid}} = useForm({
+    mode: 'onTouched'
+  });
+
+  function submitForm(data: FieldValues) {
+    agent.Subscription.createSubscriptionPlan(data);
+    navigate('/');
+  }
   return (
     <Container sx={{m: '70px 180px 50px 180px'}}>
       <Typography variant="h4">New Subscription Plan</Typography>
@@ -18,11 +30,12 @@ export default function CreateMemership() {
         }}
         noValidate
         autoComplete="off"
+        onSubmit={handleSubmit(submitForm)}
       >
       <div className='row' style={{display: 'flex'}}>
           <div style={{width: '50%', position: 'relative'}}>
-            <img style={{width: '50%', padding: '20px', top: '50%', left: '50%', margin: '0', position: 'absolute', msTransform: 'translate(-50%, -50%)',
-            transform: 'translate(-50%, -50%)'}} src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeLJnzgcw-0NEcuH0joPa1I_-MCWg-yJ_v1FrDzT8&s' alt="kek"/>
+            <img style={{width: '70%', padding: '20px', top: '50%', left: '50%', margin: '0', position: 'absolute', msTransform: 'translate(-50%, -50%)',
+            transform: 'translate(-50%, -50%)'}} src='https://media.istockphoto.com/id/1373245842/vector/calendar-with-check-mark-icon-with-long-shadow-on-blank-background-flat-design.jpg?s=612x612&w=0&k=20&c=rPRRjRgWIqg5ev49MRi-CRwR2NBSnNyj8fj5i36U9D4=' alt="kek"/>
           </div>
           <div  style={{width: '50%'}}>
             <div style={{marginBottom: '40px', marginTop: '40px'}}>
@@ -31,7 +44,10 @@ export default function CreateMemership() {
                 required
                 id="outlined-required"
                 label="Name"
-                placeholder="Example"
+                placeholder="Subscription Plan Name"
+                {...register('name', {required: 'Name is required'})}
+                error={!!errors.name}
+                helperText={errors?.name?.message as string}
               />
             </div>
             <div  style={{marginBottom: '40px'}}>
@@ -40,28 +56,32 @@ export default function CreateMemership() {
                 label="Description"
                 multiline
                 placeholder="Thi is the desciption for my subscription plan"
+                {...register('description', {required: 'Description is required'})}
+                error={!!errors.description}
+                helperText={errors?.description?.message as string}
               />
             </div>
-            <div  style={{marginBottom: '40px'}}>
+            <div>
             <TextField
                 id="outlined-disabled"
                 label="Price"
                 defaultValue={1000}
+                {...register('price', {required: 'Price is required'})}
+                error={!!errors.price}
+                helperText={errors?.price?.message as string}
               />
             </div>
-            <div style={{marginBottom: '40px'}}>
-              <FormControl sx={{right: '120px'}}>
-                <FormLabel id="demo-row-radio-buttons-group-label">Recurrent charge schedule</FormLabel>
-                <RadioGroup
-                  row
-                  aria-labelledby="demo-row-radio-buttons-group-label"
-                  name="row-radio-buttons-group"
-                >
-                  <FormControlLabel value="month" control={<Radio />} label="Montlhy" />
-                  <FormControlLabel value="annual" control={<Radio />} label="Annual" />
-                </RadioGroup>
-              </FormControl>
-            </div>
+            <div style={{marginBottom: '20px'}}>
+              <LoadingButton
+                loading={isSubmitting}
+                disabled={!isValid}
+                type="submit"
+                variant="contained"
+                sx={{ mt: 3, mb: 2, width: '78%' }}
+              >
+                Create Subscription
+              </LoadingButton>
+            </div>            
           </div>
         </div>
     </Box>

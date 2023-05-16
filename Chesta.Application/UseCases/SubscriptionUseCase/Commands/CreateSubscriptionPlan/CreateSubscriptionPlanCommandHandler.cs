@@ -23,8 +23,9 @@ namespace Chesta.Application.UseCases.SubscriptionUseCase.Commands
             var subscriptionPlan = new SubscriptionPlan {
                 Name = request.Name,
                 Description = request.Description,
-                AccessLevel = request.AccessLevel,
-                SubscriptionType = request.SubscriptionType,
+                Price = Convert.ToInt32(request.Price),
+                SubscriptionType = Domain.Enums.SubscriptionType.Monthly,
+                AccessLevel = "First level",
                 AuthorId = author.Id
             };
 

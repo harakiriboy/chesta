@@ -9,7 +9,7 @@ namespace Chesta.Contracts.Subscriptions
     public record CreateSubscriptionPlanRequest(
         string Name,
         string Description,
-        string AccessLevel,
-        RequestSubscriptionType SubscriptionType
+        string Price
+        //RequestSubscriptionType SubscriptionType
     );
 }

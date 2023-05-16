@@ -19,7 +19,7 @@ namespace Chesta.Infrastructure.Services
             var priceOptions = new PriceCreateOptions
             {
                 Product = product.Id,
-                UnitAmount = 1000,
+                UnitAmount = subscriptionPlan.Price,
                 Currency = "usd",
                 Recurring = new PriceRecurringOptions { Interval = "month" },
             };

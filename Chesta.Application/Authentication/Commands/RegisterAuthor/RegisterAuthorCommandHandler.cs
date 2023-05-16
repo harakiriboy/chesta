@@ -55,7 +55,8 @@ public class RegisterAuthorCommandHandler : IRequestHandler<RegisterAuthorComman
         // 4. Checking if user is author, if yes create for him author object in db
         var author = new Author {
             AuthorUsername = command.AuthorUsername,
-            UserId = existingUser.Id
+            UserId = existingUser.Id,
+            Tag = "informatics"
         };
 
         // 6. assigning this account id to the author object

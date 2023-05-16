@@ -37,7 +37,6 @@ public static class DependencyInjection
             options.UseSqlServer("Server=localhost;Initial Catalog=ChestaTestDb;User Id=sa;Password=P@ssw0rd"));
         services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IAddressRepository, AddressRepository>();
         services.AddScoped<IAuthorRepository, AuthorRepository>();
         services.AddScoped<ISubscriptionPlanRepository, SubscriptionPlanRepository>();
         services.AddScoped<ISubscriptionRepository, SubscriptionRepository>();

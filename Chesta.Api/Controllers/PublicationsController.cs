@@ -1,5 +1,7 @@
 using Chesta.Application.UseCases.PublicationUseCase.Commands.CreatePublication;
+using Chesta.Application.UseCases.PublicationUseCase.Queries.GetAllPublicationsByAuthor;
 using Chesta.Contracts.Publications;
+using Chesta.Domain.Entities;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Chesta.Api.Controllers
 {
-    [Route("publications")]
+    [Route("chesta/publications")]
     [Authorize]
     public class PublicationsController : ApiController
     {
@@ -25,6 +27,20 @@ namespace Chesta.Api.Controllers
             var command = _mapper.Map<CreatePublicationCommand>(request);
             var result = await _mediator.Send(command);
             return Ok(result);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IEnumerable<Publication>> GetByAuthor(string authorUsername) {
+            var query =new GetAllPublicationsByAuthorQuery(authorUsername);
+            var result = await _mediator.Send(query);
+            if(result is null) {
+                var list = new List<Publication>();
+                var pub = new Publication();
+                list.Add(pub);
+                return list;
+            }
+            return result;
         }
     }
 }

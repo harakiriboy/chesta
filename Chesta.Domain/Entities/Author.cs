@@ -7,6 +7,7 @@ namespace Chesta.Domain.Entities
         public int Id { get; set; }
         public string AuthorUsername { get; set; } = null!;
         public string StripeAccountId { get; set; } = null!;
+        public string Tag { get; set; } = null!;
 
         // Author plans
         public List<SubscriptionPlan> Plans { get; set; } = null!;

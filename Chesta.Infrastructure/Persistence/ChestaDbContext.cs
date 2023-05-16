@@ -12,6 +12,11 @@ namespace Chesta.Infrastructure.Persistence
                 .HasOne(x => x.User)
                 .WithMany(x => x.Subscriptions)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Subscription>()
+                .HasOne(x => x.SubscriptionPlan)
+                .WithMany(x => x.Subscriptions)
+                .OnDelete(DeleteBehavior.Restrict);
             
             modelBuilder.Entity<Publication>()
                 .HasOne(x => x.Author)
@@ -38,9 +43,9 @@ namespace Chesta.Infrastructure.Persistence
         public DbSet<Author> Authors { get; set; } = null!;
         public DbSet<Subscription> Subscriptions { get; set; } = null!;
         public DbSet<Payment> Payments { get; set; } = null!;
-        public DbSet<Address> Address { get; set; } = null!;
         public DbSet<Comment> Comments { get; set; } = null!;
         public DbSet<Publication> Publications { get; set; } = null!;
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; } = null!;
+        public DbSet<Payout> Payouts { get; set; } = null!;
     }
 }

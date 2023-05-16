@@ -19,6 +19,9 @@ namespace Chesta.Domain.Entities
         // Publications
         public List<Publication> Publications { get; set; } = null!;
 
+        // Subscriptions
+        public List<Subscription> Subscriptions { get; set; } = null!;
+
         // Author
         public int AuthorId { get; set; }
         [ForeignKey("AuthorId")]

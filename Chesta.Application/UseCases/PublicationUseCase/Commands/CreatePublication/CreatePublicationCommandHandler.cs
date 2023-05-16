@@ -20,14 +20,15 @@ namespace Chesta.Application.UseCases.PublicationUseCase.Commands.CreatePublicat
 
         public async Task<Publication> Handle(CreatePublicationCommand request, CancellationToken cancellationToken)
         {
-            var subscriptionPlan = await _subscriptionPlanRepository.GetByIdAsync(SubscriptionPlanSpecs.ById(request.SubscriptionPlanId));
+            int subscriptionPlanId = Convert.ToInt32(request.SubscriptionPlanId);
+            var subscriptionPlan = await _subscriptionPlanRepository.GetByIdAsync(SubscriptionPlanSpecs.ById(subscriptionPlanId));
             var author = await _authorRepository.GetByIdAsync(AuthorSpecs.ById(subscriptionPlan.AuthorId));
 
             var publication = new Publication {
                 Title = request.Title,
                 Text = request.Text,
                 VideoLink = request.VideoLink,
-                SubscriptionPlanId = request.SubscriptionPlanId,
+                SubscriptionPlanId = subscriptionPlanId,
                 AuthorId = author.Id
             };
 

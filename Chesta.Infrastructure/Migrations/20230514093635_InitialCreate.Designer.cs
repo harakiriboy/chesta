@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Chesta.Infrastructure.Migrations
 {
     [DbContext(typeof(ChestaDbContext))]
-    [Migration("20230415094139_InitialCreate")]
+    [Migration("20230514093635_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,35 +23,6 @@ namespace Chesta.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Chesta.Domain.Entities.Address", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Region")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Address");
-                });
 
             modelBuilder.Entity("Chesta.Domain.Entities.Author", b =>
                 {
@@ -66,6 +37,10 @@ namespace Chesta.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StripeAccountId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tag")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -144,6 +119,34 @@ namespace Chesta.Infrastructure.Migrations
                     b.ToTable("Payments");
                 });
 
+            modelBuilder.Entity("Chesta.Domain.Entities.Payout", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Payouts");
+                });
+
             modelBuilder.Entity("Chesta.Domain.Entities.Publication", b =>
                 {
                     b.Property<int>("Id")
@@ -153,9 +156,6 @@ namespace Chesta.Infrastructure.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AuthorId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PlanId")
                         .HasColumnType("int");
 
                     b.Property<int>("SubscriptionPlanId")
@@ -177,7 +177,7 @@ namespace Chesta.Infrastructure.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.HasIndex("PlanId");
+                    b.HasIndex("SubscriptionPlanId");
 
                     b.ToTable("Publications");
                 });
@@ -200,6 +200,9 @@ namespace Chesta.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("SubscriptionPlanId")
+                        .HasColumnType("int");
+
                     b.Property<byte>("SubscriptionType")
                         .HasColumnType("tinyint");
 
@@ -209,6 +212,8 @@ namespace Chesta.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
+
+                    b.HasIndex("SubscriptionPlanId");
 
                     b.HasIndex("UserId");
 
@@ -345,6 +350,17 @@ namespace Chesta.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Chesta.Domain.Entities.Payout", b =>
+                {
+                    b.HasOne("Chesta.Domain.Entities.Author", "Author")
+                        .WithMany()
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("Chesta.Domain.Entities.Publication", b =>
                 {
                     b.HasOne("Chesta.Domain.Entities.Author", "Author")
@@ -355,7 +371,7 @@ namespace Chesta.Infrastructure.Migrations
 
                     b.HasOne("Chesta.Domain.Entities.SubscriptionPlan", "SubscriptionPlan")
                         .WithMany("Publications")
-                        .HasForeignKey("PlanId")
+                        .HasForeignKey("SubscriptionPlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -372,6 +388,12 @@ namespace Chesta.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Chesta.Domain.Entities.SubscriptionPlan", "SubscriptionPlan")
+                        .WithMany("Subscriptions")
+                        .HasForeignKey("SubscriptionPlanId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Chesta.Domain.Entities.User", "User")
                         .WithMany("Subscriptions")
                         .HasForeignKey("UserId")
@@ -379,6 +401,8 @@ namespace Chesta.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Author");
+
+                    b.Navigation("SubscriptionPlan");
 
                     b.Navigation("User");
                 });
@@ -416,6 +440,8 @@ namespace Chesta.Infrastructure.Migrations
             modelBuilder.Entity("Chesta.Domain.Entities.SubscriptionPlan", b =>
                 {
                     b.Navigation("Publications");
+
+                    b.Navigation("Subscriptions");
                 });
 
             modelBuilder.Entity("Chesta.Domain.Entities.User", b =>

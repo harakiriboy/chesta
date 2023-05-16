@@ -1,4 +1,4 @@
-using Chesta.Application.UseCases.AuthorUseCase.Commands;
+using Chesta.Application.UseCases.AuthorUseCase.Queries;
 using Chesta.Contracts.AuthorContracts;
 using Chesta.Domain.Entities;
 using MapsterMapper;
@@ -21,14 +21,20 @@ namespace Chesta.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Create(AddAuthorRequest request)
+        [HttpGet("getByUsername")]
+        public async Task<IEnumerable<Author>> GetAuthorsByUsername(string username, string? tags = null) 
         {
-            var command = _mapper.Map<AddAuthorCommand>(request);
+            var request = new GetAuthorsByUsernameRequest(username, tags);
+            var query = _mapper.Map<GetAuthorsByUsernameQuery>(request);
+            var result = await _mediator.Send(query);
+            return result;
+        }
 
-            var result = await _mediator.Send(command);
-
-            return Ok(result);
+        [HttpGet("getAuthorByUsername")]
+        public async Task<bool> GetAuthorByUsername(string username) {
+            var query = new GetAuthorByUsernameQuery(username);
+            var result = await _mediator.Send(query);
+            return result;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Chesta.Application.UseCases.PublicationUseCase.Commands.CreatePublicat
 {
     public class CreatePublicationCommand : IRequest<Publication>
     {
-        public int SubscriptionPlanId { get; set; }
+        public string SubscriptionPlanId { get; set; } = null!;
         public string Title { get; set; } = null!;
         public string Text { get; set; } = null!;
         public string VideoLink { get; set; } = null!;

@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Chesta.Application.UseCases.SubscriptionUseCase.Commands;
 using Chesta.Application.UseCases.SubscriptionUseCase.Commands.CreateSubscription;
+using Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptionPlans;
 using Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptions;
 using Chesta.Contracts.Subscriptions;
 using Chesta.Domain.Entities;
@@ -12,7 +13,7 @@ using Stripe;
 
 namespace Chesta.Api.Controllers
 {
-    [Route("subscriptions")]
+    [Route("chesta/subscriptions")]
     [Authorize]
     public class SubscriptionsController : ApiController
     {
@@ -42,6 +43,14 @@ namespace Chesta.Api.Controllers
             var result = await _mediator.Send(command);
 
             return Ok(result);
+        }
+
+        [HttpGet("plan")]
+        [AllowAnonymous]
+        public async Task<IEnumerable<SubscriptionPlan>> GetSubsriptionPlans() {
+            var command = new GetSubscriptionPlansQuery();
+            var result = await _mediator.Send(command);
+            return result;
         }
 
         [HttpGet]

@@ -8,6 +8,6 @@ namespace Chesta.Application.Common.Interfaces.Persistence
 {
     public interface IPublicationRepository : IGenericRepository<Publication>
     {
-        
+        Task<IEnumerable<Publication>> GetByAuthorId(int id);
     }
 }

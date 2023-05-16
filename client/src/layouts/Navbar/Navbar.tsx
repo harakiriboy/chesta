@@ -163,7 +163,7 @@ function Navbar() {
                   <Link to='/Checkout' style={{textDecoration: 'none', color: 'black'}}>{'Checkout'}</Link>
               </MenuItem>
               <MenuItem key={'Author'} onClick={handleCloseUserMenu}>
-                  <Link to={`${user.email}`} style={{textDecoration: 'none', color: 'black'}}>{'Author'}</Link>
+                  <Link to={`${localStorage.getItem('localAuthor')}`} style={{textDecoration: 'none', color: 'black'}}>{'Author'}</Link>
               </MenuItem>
               <MenuItem key={'Logout'} onClick={() => dispatch(signOut())}>
                   <Link to='/' style={{textDecoration: 'none', color: 'black'}}>{'Logout'}</Link>

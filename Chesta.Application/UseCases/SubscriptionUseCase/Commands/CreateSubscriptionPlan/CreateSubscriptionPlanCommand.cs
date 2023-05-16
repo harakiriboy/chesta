@@ -12,8 +12,8 @@ namespace Chesta.Application.UseCases.SubscriptionUseCase.Commands
     {
         public string Name { get; set; } = null!;
         public string Description { get; set; } = null!;
-        public string AccessLevel { get; set; } = null!;
-        public SubscriptionType SubscriptionType { get; set; }
+        public string Price { get; set; } = null!;
+        //public SubscriptionType SubscriptionType { get; set; }
         public int UserId { get; set; }
     }
 }

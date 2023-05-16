@@ -24,6 +24,7 @@ import CreatePublication from "./features/Publication/CreatePublication";
 import EditPublication from "./features/Publication/EditPublication";
 import CreateMembership from "./features/Membership/CreateMembership";
 import EditMembership from "./features/Membership/EditMembership";
+import NoAccess from "./components/NoAccess";
 
 
 function App() {
@@ -42,7 +43,7 @@ function App() {
         <Route path="/Login" element={ <LoginPage /> } />
         <Route path="/Settings" element={ <SettingsPage/> } />
         <Route path=":username" element={ <AuthorPage/> } >
-          <Route path="/:username/posts" element={ <AuthorPublications/> } />
+          <Route path="/:username/posts" element={ <AuthorPublications /> } />
           <Route path="/:username/membership" element={ <Membership/> } />
           <Route path="/:username/about" element={ <About/> } />
         </Route>
@@ -54,6 +55,7 @@ function App() {
         <Route path="/Posts/Edit" element={ <EditPublication/> } />
         <Route path="/Membership/New" element={ <CreateMembership/> } />
         <Route path="/Membership/Edit" element={ <EditMembership/> } />
+        <Route path="/NoAccess" element={ <NoAccess/> } />
       </Route>
     )
   )

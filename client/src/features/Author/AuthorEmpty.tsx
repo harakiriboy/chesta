@@ -8,8 +8,8 @@ function AuthorEmpty() {
       <div className='row'>
         <div className='column1'>
             <Link to="posts" style={{textDecoration: 'none', color: '#28c98e'}}>
-              <Typography>
-              <div style={{marginLeft: '520px'}}>Main</div>
+              <Typography component={'span'}>
+                <div style={{marginLeft: '520px'}}>Main</div>
               </Typography>
             </Link>
         </div>
@@ -20,8 +20,8 @@ function AuthorEmpty() {
         </div>
         <div className='column3'>
         <Link to="membership" style={{textDecoration: 'none', color: '#28c98e'}}>
-          <Typography>
-          <div style={{marginRight: '520px'}}>Subscription</div>
+          <Typography component={'span'}>
+            <div style={{marginRight: '520px'}}>Subscription</div>
           </Typography>
         </Link>
         </div>

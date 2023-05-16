@@ -44,26 +44,39 @@ axios.interceptors.response.use(response => {
 })
 
 const requests = {
-    get: (url: string) => axios.get(url).then(responseBody),
+    get: (url: string, params?: URLSearchParams) => axios.get(url, {params}).then(responseBody),
     post: (url: string, body: {}) => axios.post(url, body).then(responseBody),
     put: (url: string, body: {}) => axios.put(url, body).then(responseBody),
     delete: (url: string) => axios.delete(url).then(responseBody)
 };
 
 const Subscription = {
-    list: () => requests.get('subscriptions')
+    list: () => requests.get('chesta/subscriptions'),
+    createSubscriptionPlan: (values: any) => requests.post('chesta/subscriptions/plan', values),
+    createSubscription: (values: any) => requests.post('chesta/subscriptions', values),
+    listPlans: () => requests.get('chesta/subscriptions/plan')
+}
+
+const Publication = {
+    list: () => requests.get('chesta/publications'),
+    listByAuthor: (username: string) => requests.get(`chesta/publications?authorUsername=${username}`),
+    createPublication: (values: any) => requests.post('chesta/publications', values)
 }
 
 const Account = {
-    login: (values: any) => requests.post('auth/login', values),
-    registerUser: (values: any) => requests.post('auth/registerUser', values),
-    registerAuthor: (values: any) => requests.post('auth/registerAuthor', values),
-    getCurrentUser: () => requests.get('auth/getCurrentUser')
+    login: (values: any) => requests.post('chesta/auth/login', values),
+    registerUser: (values: any) => requests.post('chesta/auth/registerUser', values),
+    registerAuthor: (values: any) => requests.post('chesta/auth/registerAuthor', values),
+    getCurrentUser: () => requests.get('chesta/auth/getCurrentUser'),
+    getCurrentAuthor: (id: number) => requests.get(`chesta/auth/getCurrentAuthor?id=${id}`),
+    getAuthorsByUsername: (params: URLSearchParams) => requests.get('chesta/author/getByUsername', params),
+    getAuthorByUsername: (username: string) => requests.get(`chesta/author/getAuthorByUsername?username=${username}`)
 }
 
 const agent = {
     Subscription,
-    Account
+    Account,
+    Publication
 }
 
 export default agent;

@@ -35,7 +35,8 @@ namespace Chesta.Application.UseCases.SubscriptionUseCase.Commands.CreateSubscri
                 Status = SubscriptionStatusEnum.Active,
                 AuthorId = author.Id,
                 UserId = user.Id,
-                SubscriptionType = subscriptionPlan.SubscriptionType
+                SubscriptionType = subscriptionPlan.SubscriptionType,
+                SubscriptionPlanId = subscriptionPlan.Id
             };
 
             await _subscriptionRepository.AddAsync(subscription);

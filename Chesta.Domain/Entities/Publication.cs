@@ -20,10 +20,15 @@ namespace Chesta.Domain.Entities
 
         // Plan
         public int SubscriptionPlanId { get; set; }
-        [ForeignKey("PlanId")]
+        [ForeignKey("SubscriptionPlanId")]
         public SubscriptionPlan SubscriptionPlan { get; set; } = null!;
 
         // Comments
         public List<Comment> Comments { get; set; } = null!;
+
+        public Publication()
+        {
+            Title = "noAuthor";
+        }
     }
 }
