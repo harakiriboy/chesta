@@ -8,16 +8,17 @@ import IconButton from '@mui/material/IconButton';
 import { Box, Typography } from '@mui/material';
 import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import ShareIcon from '@mui/icons-material/Share';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import agent from '../../services/agent';
 import LoadingComponent from '../../layouts/Loading/LoadingComponent';
-import { locationProps } from '../../pages/AuthorPage';
 import { Button } from '@mui/material';
 import UploadIcon from '@mui/icons-material/Upload';
 import ListIcon from '@mui/icons-material/List';
+import { toast } from 'react-toastify';
 
 interface subs {
     id: number;
@@ -31,27 +32,79 @@ interface subs {
 function AuthorPublications() {
     const location = useLocation();
     const navigate = useNavigate();
-    const [publications, setPublications] = useState<subs[]>()
+    const [usersSubscriptionPlans, setUsersSubscriptionPlans] = useState<number[]>();
+    const [publications, setPublications] = useState<subs[]>();
+    const [authorSubscriptionPlans, setAuthorSubscriptionPlans] = useState<number[]>();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        location.pathname = location.pathname.substring(1);
-        if(location.pathname.includes('post') || location.pathname.includes('about') || location.pathname.includes('membership')) {
-            location.pathname = location.pathname.split('/')[0];
+        var userID = 15000;
+        if (localStorage.getItem('localUser') !== undefined && localStorage.getItem('localUser') !== null) {
+          userID = JSON.parse(localStorage.getItem('localUser')!).id;
         }
+      
+        location.pathname = location.pathname.substring(1);
+        if (location.pathname.includes('post') || location.pathname.includes('about') || location.pathname.includes('membership')) {
+          location.pathname = location.pathname.split('/')[0];
+        }
+      
         agent.Account.getAuthorByUsername(location.pathname)
-            .then(response => probably(response));
-        agent.Publication.listByAuthor(location.pathname)
-          .then(response => setPublications(response))
-          .catch(error => console.log(error))
-          .finally(() => setLoading(false));
+          .then(response => probably(response))
+          .catch(error => console.log(error));
       }, [location]);
+      
+      useEffect(() => {
+        const fetchData = async () => {
+          try {
+            const response = await agent.Publication.listByAuthor(location.pathname);
+            const ids: number[] = Array.from(new Set(response.map((obj: { subscriptionPlanId: any; }) => obj.subscriptionPlanId)));
+            setAuthorSubscriptionPlans(ids);
+            setPublications(response);
+          } catch (error) {
+            console.log(error);
+          }
+        };
+      
+        fetchData();
+      }, [location]);
+      
+      useEffect(() => {
+        const userID = localStorage.getItem('localUser') ? JSON.parse(localStorage.getItem('localUser')!).id : 15000;
+      
+        const userSubPlanRequestData = {
+          userId: userID,
+          plans: authorSubscriptionPlans || []
+        };
+      
+        const fetchData = async () => {
+          try {
+            const response = await agent.Subscription.listByUserAndPlan(userSubPlanRequestData);
+            setUsersSubscriptionPlans(response);
+          } catch (error) {
+            console.log(error);
+          } finally {
+            setLoading(false);
+          }
+        };
+        if(!authorSubscriptionPlans) {
+            setLoading(false);
+        }
+        if (authorSubscriptionPlans && authorSubscriptionPlans.length > 0) {
+          fetchData();
+        }
+      }, [authorSubscriptionPlans]);
 
     function probably(isAuthor: boolean) {
         if(isAuthor) {
             return;
         }
         navigate('/NoAccess');
+    }
+
+    function deletePost(id: number) {
+        agent.Publication.deletePublication(id)
+            .then(response => toast.success('Successfully deleted'))
+            .catch(error => toast.error('There is something wrong'));
     }
 
     if(loading) return <LoadingComponent message='Loading subscription plans' />
@@ -108,19 +161,52 @@ function AuthorPublications() {
                                     </Box>
                                     <CardContent>
                                         <Typography variant="body2" color="text.secondary">
-                                        This impressive paella is a perfect party dish and a fun meal to cook
-                                        together with your guests. Add 1 cup of frozen peas along with the mussels,
-                                        if you like.
+                                        {pub.text}
                                         </Typography>
                                     </CardContent>
                                     <CardActions disableSpacing>
-                                        <IconButton aria-label="add to favorites">
-                                        <FavoriteIcon />
+                                        <IconButton onClick={() => deletePost(pub.id)} aria-label="add to favorites">
+                                        <DeleteIcon />
                                         </IconButton>
                                         <IconButton aria-label="share">
-                                        <ShareIcon />
+                                        <Link to='/posts/edit' state={pub} style={{height: '24px'}}>
+                                            <EditIcon />
+                                        </Link>
                                         </IconButton>
                                     </CardActions>
+                                </Card>
+                            )
+                        }
+                        if (usersSubscriptionPlans?.includes(parseInt(pub.subscriptionPlanId))) {
+                            return (
+                                <Card key={i} sx={{ width: '40%' }}  style={{margin: '0 auto 80px auto'}}>
+                                    <CardHeader
+                                        avatar={
+                                        <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+                                            R
+                                        </Avatar>
+                                        }
+                                        action={
+                                        <IconButton aria-label="settings">
+                                            <MoreVertIcon />
+                                        </IconButton>
+                                        }
+                                        title={pub.title}
+                                        subheader="September 14, 2016"
+                                    />
+                                    <Box sx={{ position: 'relative' }}>
+                                    <CardMedia
+                                        sx={{height: '45vh'}}
+                                        component="iframe"
+                                        image={pub.videoLink+'?rel=0'}
+                                        allowFullScreen
+                                    />
+                                    </Box>
+                                    <CardContent>
+                                        <Typography variant="body2" color="text.secondary">
+                                        {pub.text}
+                                        </Typography>
+                                    </CardContent>
                                 </Card>
                             )
                         }
@@ -157,26 +243,16 @@ function AuthorPublications() {
                                 borderRadius: 4,
                                 border: 'none'
                             }}>
-                                <Link to="membership" style={{textDecoration: 'none', color: '#dce6df'}}>
+                                <Link to={'/'+location.pathname+'/membership'} style={{textDecoration: 'none', color: '#dce6df'}}>
                                     <Typography style={{fontSize: '20px'}}>Subscribe</Typography>
                                 </Link>
                             </Box>
                             </Box>
                             <CardContent>
                                 <Typography variant="body2" color="text.secondary">
-                                This impressive paella is a perfect party dish and a fun meal to cook
-                                together with your guests. Add 1 cup of frozen peas along with the mussels,
-                                if you like.
+                                {pub.text}
                                 </Typography>
                             </CardContent>
-                            <CardActions disableSpacing>
-                                <IconButton aria-label="add to favorites">
-                                <FavoriteIcon />
-                                </IconButton>
-                                <IconButton aria-label="share">
-                                <ShareIcon />
-                                </IconButton>
-                            </CardActions>
                         </Card>
                         )
                     }

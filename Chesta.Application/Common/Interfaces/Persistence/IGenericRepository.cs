@@ -10,6 +10,7 @@ namespace Chesta.Application.Common.Interfaces.Persistence
     {
         Task<TItem> GetByIdAsync<TItem>(ASpec<TEntity> spec);
         Task<TEntity> GetByIdAsync(ASpec<TEntity> spec);
+        Task<IEnumerable<TItem>> GetAllByIdAsync<TItem>(ASpec<TEntity> spec);
         Task<IEnumerable<TItem>> GetAllAsync<TItem>(CancellationToken cancellationToken);
         Task AddAsync(TEntity entity);
 

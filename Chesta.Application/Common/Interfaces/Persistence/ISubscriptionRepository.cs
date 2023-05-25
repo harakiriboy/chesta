@@ -8,6 +8,6 @@ namespace Chesta.Application.Common.Interfaces.Persistence
 {
     public interface ISubscriptionRepository : IGenericRepository<Subscription>
     {
-        
+        Task<List<int>> GetByUserAndPlans(int id, int[] plans);
     }
 }

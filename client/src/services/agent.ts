@@ -52,15 +52,20 @@ const requests = {
 
 const Subscription = {
     list: () => requests.get('chesta/subscriptions'),
+    listByUserAndPlan: (values: any) => requests.post('chesta/subscriptions/byUserAndPlan', values),
     createSubscriptionPlan: (values: any) => requests.post('chesta/subscriptions/plan', values),
     createSubscription: (values: any) => requests.post('chesta/subscriptions', values),
-    listPlans: () => requests.get('chesta/subscriptions/plan')
+    listPlans: (author: string) => requests.get(`chesta/subscriptions/plan?author=${author}`),
+    deleteSubscriptionPlan: (id: number) => requests.delete(`chesta/subscriptions/plan?id=${id}`),
+    editSubscriptionPlan: (values: any) => requests.post('chesta/subscriptions/plan/edit', values)
 }
 
 const Publication = {
     list: () => requests.get('chesta/publications'),
     listByAuthor: (username: string) => requests.get(`chesta/publications?authorUsername=${username}`),
-    createPublication: (values: any) => requests.post('chesta/publications', values)
+    createPublication: (values: any) => requests.post('chesta/publications', values),
+    deletePublication: (id: number) => requests.delete(`chesta/publications?id=${id}`),
+    editPublication: (values: any) => requests.post('chesta/publications/edit', values)
 }
 
 const Account = {
@@ -70,7 +75,8 @@ const Account = {
     getCurrentUser: () => requests.get('chesta/auth/getCurrentUser'),
     getCurrentAuthor: (id: number) => requests.get(`chesta/auth/getCurrentAuthor?id=${id}`),
     getAuthorsByUsername: (params: URLSearchParams) => requests.get('chesta/author/getByUsername', params),
-    getAuthorByUsername: (username: string) => requests.get(`chesta/author/getAuthorByUsername?username=${username}`)
+    getAuthorByUsername: (username: string) => requests.get(`chesta/author/getAuthorByUsername?username=${username}`),
+    editAuthorProfile: (values: any) => requests.post('chesta/author/edit', values)
 }
 
 const agent = {

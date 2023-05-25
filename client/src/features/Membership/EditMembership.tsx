@@ -3,8 +3,11 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Container from '@mui/material/Container';
 import { Typography, FormControl, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 
 export default function EditMembership() {
+  const location = useLocation();
+  const subscription = location.state;
   return (
     <Container sx={{m: '70px 180px 50px 180px'}}>
       <Typography variant="h4">Edit Subscription Plan</Typography>
@@ -32,6 +35,7 @@ export default function EditMembership() {
                 id="outlined-required"
                 label="Name"
                 placeholder="Example"
+                defaultValue={subscription.name}
               />
             </div>
             <div  style={{marginBottom: '40px'}}>
@@ -40,13 +44,14 @@ export default function EditMembership() {
                 label="Description"
                 multiline
                 placeholder="Thi is the desciption for my subscription plan"
+                defaultValue={subscription.description}
               />
             </div>
             <div  style={{marginBottom: '40px'}}>
             <TextField
                 id="outlined-disabled"
                 label="Price"
-                defaultValue={1000}
+                defaultValue={subscription.price}
               />
             </div>
             <div style={{marginBottom: '40px'}}>

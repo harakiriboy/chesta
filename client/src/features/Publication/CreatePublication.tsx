@@ -9,6 +9,7 @@ import { LoadingButton } from '@mui/lab';
 import { useEffect, useState } from 'react';
 import LoadingComponent from '../../layouts/Loading/LoadingComponent';
 import NoAccess from '../../components/NoAccess';
+import { toast } from 'react-toastify';
 
 export default function CreatePublication() {
   const [userType, setUserType] = useState<string>("");
@@ -23,7 +24,7 @@ export default function CreatePublication() {
     if (user !== null || user !== undefined) {
       setUserType(user.role);
     }
-    agent.Subscription.listPlans()
+    agent.Subscription.listPlans(localStorage.getItem('localAuthor')!)
       .then(response => setSubscriptionPlans(response))
       .catch(error => console.log(error))
       .finally(() => setLoading(false))
@@ -35,7 +36,9 @@ export default function CreatePublication() {
   });
 
   function submitForm(data: FieldValues) {
-    agent.Publication.createPublication(data);
+    agent.Publication.createPublication(data)
+      .then(response => toast.success('Post created successfully'))
+      .catch(error => toast.error('There is some error'));
     navigate('/');
   }
 
@@ -102,9 +105,8 @@ export default function CreatePublication() {
                 <RadioGroup
                   row
                   aria-labelledby="demo-row-radio-buttons-group-label"
-                  {...register('subscriptionPlanId', {required: 'Subscription Plan is required'})}
                 >
-                  {subscriptionPlans.map((o) => <FormControlLabel key={o.id} value={o.id} control={<Radio />} label={o.name} />)}
+                  {subscriptionPlans.map((o) => <FormControlLabel {...register('subscriptionPlanId', {required: 'Subscription Plan is required'})} key={o.id} value={o.id} control={<Radio />} label={o.name} />)}
                 </RadioGroup>
               </FormControl>
             </div>

@@ -1,9 +1,4 @@
-import { Button } from '@mui/material';
 import './AuthorMain.css';
-import UploadIcon from '@mui/icons-material/Upload';
-import ListIcon from '@mui/icons-material/List';
-import { Link } from 'react-router-dom';
-import { locationProps } from '../../pages/AuthorPage';
 
 function AuthorMain() {
     return (

@@ -114,7 +114,7 @@ export default function Search() {
           <Typography>Nothing to display</Typography>
         ) : (
           <ul>
-            {authorSearchParams.authors.map(o => <li>
+            {authorSearchParams.authors.map(o => <li key={o.id}>
               <Link to={`/${o.authorUsername}`} style={{textDecoration: 'none', color: 'black'}}>{o.authorUsername}</Link>
             </li>)}
           </ul>

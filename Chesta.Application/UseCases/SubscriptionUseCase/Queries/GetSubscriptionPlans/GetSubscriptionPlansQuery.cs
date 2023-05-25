@@ -9,6 +9,11 @@ namespace Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptio
 {
     public class GetSubscriptionPlansQuery : IRequest<IEnumerable<SubscriptionPlan>>
     {
-        
+        public string Author { get; set; } = null!;
+
+        public GetSubscriptionPlansQuery(string username)
+        {
+            Author = username;   
+        }
     }
 }

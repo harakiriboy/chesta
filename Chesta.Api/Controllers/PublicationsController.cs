@@ -1,4 +1,6 @@
 using Chesta.Application.UseCases.PublicationUseCase.Commands.CreatePublication;
+using Chesta.Application.UseCases.PublicationUseCase.Commands.DeletePublication;
+using Chesta.Application.UseCases.PublicationUseCase.Commands.UpdatePublication;
 using Chesta.Application.UseCases.PublicationUseCase.Queries.GetAllPublicationsByAuthor;
 using Chesta.Contracts.Publications;
 using Chesta.Domain.Entities;
@@ -27,6 +29,20 @@ namespace Chesta.Api.Controllers
             var command = _mapper.Map<CreatePublicationCommand>(request);
             var result = await _mediator.Send(command);
             return Ok(result);
+        }
+
+        [HttpPost("edit")]
+        public async Task<IActionResult> Edit(CreatePublicationRequest request) {
+            var command = _mapper.Map<UpdatePublicationCommand>(request);
+            var result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpDelete]
+        public async Task<bool> Delete(int id) {
+            var command = new DeletePublicationCommand(id);
+            var result = await _mediator.Send(command);
+            return result;
         }
 
         [HttpGet]

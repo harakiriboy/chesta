@@ -9,7 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import LoadingComponent from '../../layouts/Loading/LoadingComponent';
 import agent from '../../services/agent';
@@ -24,20 +24,26 @@ export interface SubscriptionPlan {
 }
 
 function PricingContent() {
+  const location = useLocation();
+  
   const [subscriptionPlans, setSubscriptionPlans] = useState<SubscriptionPlan[]>();
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    agent.Subscription.listPlans()
+    location.pathname = location.pathname.substring(1);
+        if(location.pathname.includes('membership')) {
+            location.pathname = location.pathname.split('/')[0];
+        }
+    agent.Subscription.listPlans(location.pathname)
       .then(response => setSubscriptionPlans(response))
       .catch(error => console.log(error))
       .finally(() => setLoading(false))
-  }, [])
+  }, [location])
 
   if(loading) return <LoadingComponent message='Loading subscription plans' />
 
   return (
     <>
-    {localStorage.getItem('localUser') === 'author' ? (
+    {(JSON.parse(localStorage.getItem('localUser')!).role === 'author' && localStorage.getItem('localAuthor') === location.pathname) ? (
       <React.Fragment>
       <CssBaseline />
       <Container maxWidth="md" component="main">
@@ -84,7 +90,7 @@ function PricingContent() {
                       <Typography>{tier.description}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Link to="/Membership/Edit" style={{width: '100%'}}>
+                      <Link to="/Membership/Edit" state={tier} style={{width: '100%'}}>
                       <Button
                         fullWidth
                         variant={'contained'}
@@ -156,14 +162,12 @@ function PricingContent() {
                       <Typography>{tier.description}</Typography>
                     </CardContent>
                     <CardActions>
-                      <Link to="/Membership/Edit" style={{width: '100%'}}>
                       <Button
                         fullWidth
                         variant={'contained'}
                       >
                         <Link to="/Checkout" state={tier} style={{textDecoration: 'none', color: 'white'}}>Subscribe for ${tier.price/100}</Link>
                       </Button>
-                      </Link>
                     </CardActions>
                   </Card>
                 </Grid>

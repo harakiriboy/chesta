@@ -15,7 +15,9 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import agent from "../../services/agent";
+import { FieldValues } from "react-hook-form";
 
 function Copyright() {
   return (
@@ -37,24 +39,26 @@ function getStepContent(step: number, subPlan: SubscriptionPlan) {
     case 0:
       return <PaymentForm />;
     case 1:
+      console.log({...subPlan});
       return <Review {...subPlan}/>;
     default:
       throw new Error('Unknown step');
   }
 }
-
-function handleSubscription() {
-  
-}
-
 const theme = createTheme();
 
 function Checkout() {
+  const navigate = useNavigate();
   const location = useLocation();
-  const subscriptionPlan = location.state.tier;
+  const subscriptionPlan = location.state;
   const [activeStep, setActiveStep] = React.useState(0);
 
-  const handleNext = () => {
+  const handleNext = (data: string) => {
+    if (activeStep === steps.length - 1) {
+      const subData = {subscriptionPlanId: parseInt(data)}
+      agent.Subscription.createSubscription(subData);
+      navigate('/');
+    }
     setActiveStep(activeStep + 1);
   };
 
@@ -99,7 +103,7 @@ function Checkout() {
                 )}
                 <Button
                   variant="contained"
-                  onClick={handleNext}
+                  onClick={() => handleNext(subscriptionPlan.id)}
                   sx={{ mt: 3, ml: 1 }}
                 >
                   {activeStep === steps.length - 1 ? 'Place order' : 'Next'}

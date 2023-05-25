@@ -15,7 +15,9 @@ namespace Chesta.Application.UseCases.SubscriptionUseCase.Commands.CreateSubscri
         private readonly ISubscriptionRepository _subscriptionRepository; 
         private readonly IStripeSubscriptionService _subscriptionService;
 
-        public CreateSubscriptionCommandHandler(IUserRepository userRepository, IAuthorRepository authorRepository, ISubscriptionPlanRepository subscriptionPlanRepository, ISubscriptionRepository subscriptionRepository, IStripeSubscriptionService subscriptionService)
+        public CreateSubscriptionCommandHandler(IUserRepository userRepository, IAuthorRepository authorRepository, 
+        ISubscriptionPlanRepository subscriptionPlanRepository, ISubscriptionRepository subscriptionRepository, 
+        IStripeSubscriptionService subscriptionService)
         {
             _userRepository = userRepository;
             _authorRepository = authorRepository;
@@ -26,9 +28,11 @@ namespace Chesta.Application.UseCases.SubscriptionUseCase.Commands.CreateSubscri
         public async Task<Subscription> Handle(CreateSubscriptionCommand request, CancellationToken cancellationToken)
         {
             var user = await _userRepository.GetByIdAsync<User>(UserSpecs.ById(request.UserId));
-            var subscriptionPlan = await _subscriptionPlanRepository.GetByIdAsync<SubscriptionPlan>(SubscriptionPlanSpecs.ById(request.SubscriptionPlanId));
+            var subscriptionPlan = await _subscriptionPlanRepository
+            .GetByIdAsync<SubscriptionPlan>(SubscriptionPlanSpecs.ById(request.SubscriptionPlanId));
             var author = await _authorRepository.GetByIdAsync<Author>(AuthorSpecs.ById(subscriptionPlan.AuthorId));
-            var stripeSubscriptionId = await _subscriptionService.CreateStripeSubscription(user.CustomerId, author.StripeAccountId, subscriptionPlan);
+            var stripeSubscriptionId = await _subscriptionService
+            .CreateStripeSubscription(user.CustomerId, author.StripeAccountId, subscriptionPlan);
 
             var subscription = new Subscription {
                 StripeSubscriptionId = stripeSubscriptionId,
@@ -38,9 +42,7 @@ namespace Chesta.Application.UseCases.SubscriptionUseCase.Commands.CreateSubscri
                 SubscriptionType = subscriptionPlan.SubscriptionType,
                 SubscriptionPlanId = subscriptionPlan.Id
             };
-
             await _subscriptionRepository.AddAsync(subscription);
-
             return subscription;
         }
     }

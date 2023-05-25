@@ -3,6 +3,7 @@ using Chesta.Application.UseCases.SubscriptionUseCase.Commands;
 using Chesta.Application.UseCases.SubscriptionUseCase.Commands.CreateSubscription;
 using Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptionPlans;
 using Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptions;
+using Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptionsByUserAndPlans;
 using Chesta.Contracts.Subscriptions;
 using Chesta.Domain.Entities;
 using MapsterMapper;
@@ -47,15 +48,28 @@ namespace Chesta.Api.Controllers
 
         [HttpGet("plan")]
         [AllowAnonymous]
-        public async Task<IEnumerable<SubscriptionPlan>> GetSubsriptionPlans() {
-            var command = new GetSubscriptionPlansQuery();
+        public async Task<IEnumerable<SubscriptionPlan>> GetSubsriptionPlans(string author) {
+            var command = new GetSubscriptionPlansQuery(author);
             var result = await _mediator.Send(command);
+            if(result is null) {
+                var list = new List<SubscriptionPlan>();
+                var plan = new SubscriptionPlan();
+                list.Add(plan);
+                return list;
+            }
             return result;
         }
 
         [HttpGet]
         public async Task<IEnumerable<Domain.Entities.Subscription>> GetAll() {
             var query = new GetSubscriptionsQuery();
+            var result = await _mediator.Send(query);
+            return result;
+        }
+
+        [HttpPost("byUserAndPlan")]
+        public async Task<List<int>> GetSubscriptionPlansByUserAndPublicationPlan(GetSubscriptionByUserAndPlanRequest request) {
+            var query = _mapper.Map<GetSubscriptionsByUserAndPlansQuery>(request);
             var result = await _mediator.Send(query);
             return result;
         }
