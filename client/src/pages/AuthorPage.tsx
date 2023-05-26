@@ -24,7 +24,7 @@ function AuthorPage() {
               </div>
             ) : (
               <AuthorPublications />
-            )}
+            )} 
       </div>
     </div>
   )

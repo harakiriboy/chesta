@@ -8,25 +8,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Author } from "../../models/Author";
+import { Link } from "react-router-dom";
 
-interface Subscriber {
-    id: number;
-    firstName: string;
-    lastName: string;
-    email: string;
-}
-
-export default function Members() {
+export default function Followings() {
   const [loading, setLoading] = useState(true);
-  const [subscribers, setSubscribers] = useState<Subscriber[]>();
-  var author = localStorage.getItem('localAuthor')!;
+  const [authors, setAuthors] = useState<Author[]>();
+  var user = localStorage.getItem('localUser')!;
 
   useEffect(() => {
-    agent.MembersAndAuthors.getAuthorSubscribers(author)
-      .then(response => setSubscribers(response))
+    agent.MembersAndAuthors.getSubscriberAuthors(JSON.parse(user).id)
+      .then(response => setAuthors(response))
       .catch(error => console.log(error))
       .finally(() => setLoading(false));
-  }, [author])
+  }, [user])
 
   if(loading) return <LoadingComponent message='Loading subscribers' />
   
@@ -35,28 +30,24 @@ export default function Members() {
     <Table sx={{ minWidth: 650 }} aria-label="simple table">
       <TableHead>
         <TableRow>
-          <TableCell>User Id</TableCell>
-          <TableCell>FirstName</TableCell>
-          <TableCell>LastName</TableCell>
-          <TableCell>Email</TableCell>
+          <TableCell>Username</TableCell>
+          <TableCell>Subject</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {subscribers!.map((subscriber) => (
+        {authors!.map((author) => (
           <TableRow
-            key={subscriber.id}
+            key={author.authorUsername}
             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
           >
             <TableCell component="th" scope="row">
-              {subscriber.id}
+              <Link to={'/'+author.authorUsername}>
+              {author.authorUsername}
+              </Link>
             </TableCell>
             <TableCell component="th" scope="row">
-              {subscriber.firstName}
+              {author.tag}
             </TableCell>
-            <TableCell component="th" scope="row">
-              {subscriber.lastName}
-            </TableCell>
-            <TableCell component="th">{subscriber.email}</TableCell>
           </TableRow>
         ))}
       </TableBody>

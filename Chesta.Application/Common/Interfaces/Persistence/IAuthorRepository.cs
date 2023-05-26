@@ -11,5 +11,6 @@ namespace Chesta.Application.Common.Interfaces.Persistence
         Task<Author> GetByUserId(int id);
         Task<Author?> GetByUsername(string username);
         Task<IEnumerable<Author>> GetByUsernameAndTag(string username, string tag);
+        Task<IEnumerable<Author>> GetByIds(List<int> ids);
     }
 }

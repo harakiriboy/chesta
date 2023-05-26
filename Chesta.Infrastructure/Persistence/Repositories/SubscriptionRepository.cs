@@ -27,5 +27,23 @@ namespace Chesta.Infrastructure.Persistence.Repositories
             }
             return existingPlans;
         }
+
+        public async Task<List<int>> GetByAuthorId(int id) {
+            List<int> userIds = new List<int>();
+            var subscriptions = await _context.Subscriptions.Where(x => x.AuthorId == id).AsQueryable().ToListAsync();
+            foreach(Subscription i in subscriptions) {
+                userIds.Add(i.UserId);
+            }
+            return userIds;
+        }
+
+        public async Task<List<int>> GetByUserId(int id) {
+            List<int> authorIds = new List<int>();
+            var subscriptions = await _context.Subscriptions.Where(x => x.UserId == id).AsQueryable().ToListAsync();
+            foreach(Subscription i in subscriptions) {
+                authorIds.Add(i.AuthorId);
+            }
+            return authorIds;
+        }
     }
 }

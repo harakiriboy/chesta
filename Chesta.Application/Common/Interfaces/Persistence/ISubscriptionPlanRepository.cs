@@ -8,6 +8,6 @@ namespace Chesta.Application.Common.Interfaces.Persistence
 {
     public interface ISubscriptionPlanRepository : IGenericRepository<SubscriptionPlan>
     {
-        
+        Task<SubscriptionPlan> UpdatePlan(SubscriptionPlan plan);
     }
 }

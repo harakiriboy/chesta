@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { signOut } from '../../features/Account/accountSlice';
 import { useAppDispatch, useAppSelector } from '../../context/configureStore';
 
-const pages = ['Home', 'Search'];
+const pages = ['Search'];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
@@ -157,13 +157,16 @@ function Navbar() {
                   <MenuItem key={'Insights'} onClick={handleCloseUserMenu}>
                       <Link to='/Insights' style={{ textDecoration: 'none', color: 'black' }}>{'Insights'}</Link>
                   </MenuItem>
+                  <MenuItem key={'Author'} onClick={handleCloseUserMenu}>
+                      <Link to={`${localStorage.getItem('localAuthor')}`} style={{textDecoration: 'none', color: 'black'}}>{'Author'}</Link>
+                  </MenuItem>
                 </div>
               }
+              <MenuItem key={'Followings'} onClick={handleCloseUserMenu}>
+                    <Link to='/Followings' style={{ textDecoration: 'none', color: 'black' }}>{'Followings'}</Link>
+                  </MenuItem>
               <MenuItem key={'Checkout'} onClick={handleCloseUserMenu}>
                   <Link to='/Checkout' style={{textDecoration: 'none', color: 'black'}}>{'Checkout'}</Link>
-              </MenuItem>
-              <MenuItem key={'Author'} onClick={handleCloseUserMenu}>
-                  <Link to={`${localStorage.getItem('localAuthor')}`} style={{textDecoration: 'none', color: 'black'}}>{'Author'}</Link>
               </MenuItem>
               <MenuItem key={'Logout'} onClick={() => dispatch(signOut())}>
                   <Link to='/' style={{textDecoration: 'none', color: 'black'}}>{'Logout'}</Link>

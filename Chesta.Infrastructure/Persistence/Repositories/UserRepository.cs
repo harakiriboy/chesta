@@ -26,5 +26,10 @@ namespace Chesta.Infrastructure.Persistence
             var newuser = _context.Users.FirstOrDefault(x => x.Id == user.Id);
             return newuser!;
         }
+
+        public async Task<List<User>> GetByIds(List<int> ids) {
+            var users = await _context.Users.Where(user => ids.Contains(user.Id)).Distinct().ToListAsync();
+            return users;
+        }
     }
 }

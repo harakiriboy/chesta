@@ -7,5 +7,6 @@ namespace Chesta.Application.Common.Interfaces.Persistence
         User? GetUserByEmail(string email);
 
         User Add(User user);
+        Task<List<User>> GetByIds(List<int> ids);
     }
 }

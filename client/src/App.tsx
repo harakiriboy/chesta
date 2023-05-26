@@ -25,6 +25,7 @@ import EditPublication from "./features/Publication/EditPublication";
 import CreateMembership from "./features/Membership/CreateMembership";
 import EditMembership from "./features/Membership/EditMembership";
 import NoAccess from "./components/NoAccess";
+import Followings from "./features/Followings/Followings";
 
 
 function App() {
@@ -48,6 +49,7 @@ function App() {
           <Route path="/:username/about" element={ <About/> } />
         </Route>
         <Route path="/Members" element={ <MembersPage/> } />
+        <Route path="/Followings" element={ <Followings/> } />
         <Route path="/Payouts" element={ <PayoutsPage/> } />
         <Route path="/Insights" element={ <AnalyticsPage/> } />
         <Route path="/Checkout" element={ <CheckoutPage/> } />

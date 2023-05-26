@@ -117,14 +117,6 @@ function AuthorPublications() {
                         <Button variant='outlined' color='primary' sx={{mr: 1, borderRadius: '10px'}}>
                             <Link style={{textDecoration: 'none', color: '#3f50b5'}} to="/posts/create">Create</Link>
                         </Button>
-                        <Button variant='outlined' color='info' sx={{mr: 1, borderRadius: '10px'}}>
-                            <UploadIcon/>
-                        </Button>
-                        <Button variant='outlined' color='error' sx={{mr: 1, borderRadius: '10px'}}>
-                            <Link style={{height: '24px'}} to="/posts/edit">
-                                <ListIcon/>
-                            </Link>
-                        </Button>
                     </div>
                 ) : (
                     <div style={{display: 'none'}}></div>

@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Chesta.Application.UseCases.SubscriptionUseCase.Commands;
 using Chesta.Application.UseCases.SubscriptionUseCase.Commands.CreateSubscription;
+using Chesta.Application.UseCases.SubscriptionUseCase.Commands.EditSubscriptionPlan;
 using Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptionPlans;
 using Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptions;
 using Chesta.Application.UseCases.SubscriptionUseCase.Queries.GetSubscriptionsByUserAndPlans;
@@ -41,6 +42,14 @@ namespace Chesta.Api.Controllers
             var command = _mapper.Map<CreateSubscriptionPlanCommand>(request);
             command.UserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
             
+            var result = await _mediator.Send(command);
+
+            return Ok(result);
+        }
+
+        [HttpPost("plan/edit")]
+        public async Task<IActionResult> editSubscriptionPlan(EditSubscriptionPlanRequest request) {
+            var command = _mapper.Map<EditSubscriptionPlanCommand>(request);
             var result = await _mediator.Send(command);
 
             return Ok(result);

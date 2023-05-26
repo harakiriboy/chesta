@@ -9,5 +9,7 @@ namespace Chesta.Application.Common.Interfaces.Persistence
     public interface ISubscriptionRepository : IGenericRepository<Subscription>
     {
         Task<List<int>> GetByUserAndPlans(int id, int[] plans);
+        Task<List<int>> GetByAuthorId(int id);
+        Task<List<int>> GetByUserId(int id);
     }
 }

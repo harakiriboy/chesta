@@ -52,5 +52,10 @@ namespace Chesta.Infrastructure.Persistence.Repositories
             var authors = await _context.Authors.Where(x => x.AuthorUsername.ToLower().Contains(usernameLower)).AsQueryable().ToListAsync();
             return authors;
         }
+
+        public async Task<IEnumerable<Author>> GetByIds(List<int> ids) {
+            var authors = await _context.Authors.Where(author => ids.Contains(author.Id)).Distinct().ToListAsync();
+            return authors;
+        }
     }
 }

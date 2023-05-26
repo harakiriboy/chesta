@@ -1,8 +1,16 @@
+import NoAccess from '../components/NoAccess';
 import Members from '../features/Members/Members'
 
 function MembersPage() {
+  var author = localStorage.getItem('localAuthor');
   return (
-    <Members data={[]} />
+    <>
+      {author ? (
+      <Members />
+    ) : (
+      <NoAccess/>
+    )}
+    </>
   )
 }
 

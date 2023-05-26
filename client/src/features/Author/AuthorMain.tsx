@@ -1,6 +1,12 @@
+import { useLocation } from 'react-router-dom';
 import './AuthorMain.css';
 
 function AuthorMain() {
+    var location = useLocation();
+    var authorname = location.pathname.substring(1);
+    if (location.pathname.includes('post') || location.pathname.includes('about') || location.pathname.includes('membership')) {
+        authorname = authorname.split('/')[0];
+    }
     return (
         <>
             <div className="row">
@@ -14,7 +20,7 @@ function AuthorMain() {
                     </div>
                     </div>
                     <div className="row">
-                        <p style={{fontSize: '16px', fontWeight: 'bold', margin: '5px auto'}}>harakiriboy</p>
+                        <p style={{fontSize: '16px', fontWeight: 'bold', margin: '5px auto'}}>{authorname}</p>
                     </div>
                     <div className="row">
                         <p style={{fontSize: '15px', margin: '5px auto'}}>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Optio dolor eos, voluptatum, perspiciatis unde quibusdam.</p>

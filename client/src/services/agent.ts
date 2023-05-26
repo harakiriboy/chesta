@@ -79,10 +79,16 @@ const Account = {
     editAuthorProfile: (values: any) => requests.post('chesta/author/edit', values)
 }
 
+const MembersAndAuthors = {
+    getAuthorSubscribers: (username: string) => requests.get(`chesta/author/getAuthorSubscribers?username=${username}`),
+    getSubscriberAuthors: (id: number) => requests.get(`chesta/author/getSubscriberAuthors?id=${id}`)
+} 
+
 const agent = {
     Subscription,
     Account,
-    Publication
+    Publication,
+    MembersAndAuthors
 }
 
 export default agent;
